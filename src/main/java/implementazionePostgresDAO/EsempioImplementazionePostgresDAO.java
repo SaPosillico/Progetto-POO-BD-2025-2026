@@ -1,4 +1,4 @@
-package implementazioniPostgresDAO;
+package implementazionePostgresDAO;
 
 import Database.ConnessioneDatabase;
 import java.sql.Connection;
