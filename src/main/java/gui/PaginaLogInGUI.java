@@ -99,5 +99,11 @@ public class PaginaLogInGUI {
                 controller.changeFrame(new PaginaProiezioniGUI(frameHome,controller).getFrame());
             }
         });
+        invioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
     }
 }
