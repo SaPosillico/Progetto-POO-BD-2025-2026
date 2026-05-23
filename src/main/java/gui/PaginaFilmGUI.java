@@ -28,6 +28,8 @@ public class PaginaFilmGUI {
         frameFilm.pack();
         frameFilm.setVisible(true);
 
+        frameFilm.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
