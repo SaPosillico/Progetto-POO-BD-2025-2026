@@ -46,7 +46,6 @@ public class PaginaLogInGUI {
         PannelloLogInCliente loginCliente = new PannelloLogInCliente(frameHome,controller);
         PannelloLogInAdmin loginAdmin = new PannelloLogInAdmin(frameHome, controller);
 
-        // 3. Aggiungiamo i pannelli come schede
         accessTabbedPane.addTab("Area Clienti", loginCliente);
         accessTabbedPane.addTab("Area Staff / Admin", loginAdmin);
 

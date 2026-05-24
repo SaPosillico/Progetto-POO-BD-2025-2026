@@ -64,4 +64,9 @@ public class Biglietto {
     public void setAcquisto(Pagamento acquisto) {
         this.acquisto = acquisto;
     }
+
+    @Override
+    public String toString() {
+        return "Codice: "+codiceBiglietto +", Prezzo: "+ prezzo +", Posto: "+ numeroPosto.getNumeroPosto();
+    }
 }

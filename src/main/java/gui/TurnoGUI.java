@@ -1,6 +1,8 @@
 package gui;
 
 import controller.*;
+import model.Staff;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,12 +20,11 @@ public class TurnoGUI {
         return this.frameTurno;
     }
 
-    public TurnoGUI(JFrame frameHome, JFrame frameLocalHome, Controller controller) {
+    public TurnoGUI(JFrame frameHome, JFrame frameLocalHome, Controller controller, Staff membro) {
         frameTurno = new JFrame("LoggedStaffGUI");
         frameTurno.setContentPane(mainPanel);
         frameTurno.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameTurno.pack();
-        frameTurno.setVisible(true);
 
         homeButton.addActionListener(new ActionListener() {
             @Override
@@ -34,13 +35,13 @@ public class TurnoGUI {
         visualizzaDatiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(new VisualizzaDatiGUI(frameHome,frameLocalHome,controller).getFrame());
+                controller.changeFrame(new VisualizzaDatiGUI(frameHome,frameLocalHome,controller,membro).getFrame());
             }
         });
         inserisciDatiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(new InserisciDatiGUI(frameHome,frameLocalHome,controller).getFrame());
+                controller.changeFrame(new InserisciDatiGUI(frameHome,frameLocalHome,controller,membro).getFrame());
             }
         });
         logOutButton.addActionListener(new ActionListener() {

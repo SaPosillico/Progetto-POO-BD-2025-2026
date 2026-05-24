@@ -12,6 +12,7 @@ public class PaginaProiezioniGUI {
     private JButton filmButton;
     private JButton proiezioniButton;
     private JButton logInButton;
+    private JTable projectionTable;
     private JFrame frameProiezioni;
 
     public JFrame getFrame() {
@@ -42,6 +43,7 @@ public class PaginaProiezioniGUI {
                 controller.changeFrame(new PaginaLogInGUI(frameHome,controller).getFrame());
             }
         });
+        controller.aggiornaTabellaProiezioni(projectionTable);
     }
 
 }

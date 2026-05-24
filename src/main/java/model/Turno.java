@@ -6,11 +6,13 @@ public class Turno {
     private LocalTime oraInizioTurno;
     private LocalTime oraFineTurno;
     private Staff membro;
+    private String mansione;
 
-    public Turno(LocalTime oraInizioTurno, LocalTime oraFineTurno, Staff membro) {
+    public Turno(LocalTime oraInizioTurno, LocalTime oraFineTurno, Staff membro, String mansione) {
         this.oraInizioTurno = oraInizioTurno;
         this.oraFineTurno = oraFineTurno;
         this.membro = membro;
+        this.mansione = mansione;
     }
 
     public LocalTime getOraInizioTurno() {
@@ -35,5 +37,13 @@ public class Turno {
 
     public void setMembro(Staff membro) {
         this.membro = membro;
+    }
+
+    public String getMansione() {
+        return mansione;
+    }
+
+    public void setMansione(String mansione) {
+        this.mansione = mansione;
     }
 }

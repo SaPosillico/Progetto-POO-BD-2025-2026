@@ -3,8 +3,8 @@ package model;
 public class ClienteVIP extends Cliente{
     private double percentualeSconto;
 
-    public ClienteVIP(String email, String nome, String cognome, double percentualeSconto) {
-        super(email, nome, cognome);
+    public ClienteVIP(String email, String nome, String cognome, double percentualeSconto, String password) {
+        super(email, nome, cognome, password);
         this.percentualeSconto = percentualeSconto;
     }
 

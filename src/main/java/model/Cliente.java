@@ -4,13 +4,15 @@ import java.util.ArrayList;
 
 public class Cliente {
     private String email;
+    private String password;
     private String nome;
     private String cognome;
     private ArrayList<Recensione> filmRecensiti;
     private ArrayList<Pagamento> elencoPagamenti;
 
-    public Cliente(String email, String nome, String cognome) {
+    public Cliente(String email, String nome, String cognome, String password) {
         this.email = email;
+        this.password = password;
         this.nome = nome;
         this.cognome = cognome;
         this.filmRecensiti = new ArrayList<>();
@@ -39,6 +41,14 @@ public class Cliente {
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public ArrayList<Recensione> getFilmRecensiti() {
