@@ -26,9 +26,6 @@ public class PaginaFilmGUI {
         frameFilm.setContentPane(mainPanel);
         frameFilm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameFilm.pack();
-        frameFilm.setVisible(true);
-
-        frameFilm.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         homeButton.addActionListener(new ActionListener() {
             @Override
@@ -48,5 +45,7 @@ public class PaginaFilmGUI {
                 controller.changeFrame(new PaginaLogInGUI(frameHome,controller).getFrame());
             }
         });
+
+        controller.popolaElencoFilm(sezioneFilm);
     }
 }

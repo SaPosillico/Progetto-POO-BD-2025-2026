@@ -17,7 +17,7 @@ public class LoggedClientGUI {
         return this.frameLoggedClient;
     }
 
-    public LoggedClientGUI(JFrame frameHome, JFrame frameLocalHome, Controller controller) {
+    public LoggedClientGUI(JFrame frameHome, Controller controller) {
         frameLoggedClient = new JFrame("LoggedClientGUI");
         frameLoggedClient.setContentPane(mainPanel);
         frameLoggedClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

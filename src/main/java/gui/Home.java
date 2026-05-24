@@ -1,7 +1,6 @@
 package gui;
 
 import controller.Controller;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,7 +31,6 @@ public class Home {
 
     public Home() {
         controller = new Controller(frameHome);
-        // Add action listeners or other initialization code here
 
         areaDescrizione.setText("""
     ============================================================
@@ -92,6 +90,5 @@ public class Home {
                 controller.changeFrame(new PaginaLogInGUI(frameHome,controller).getFrame());
             }
         });
-        areaDescrizione.setSize(1920,1080);
     }
 }

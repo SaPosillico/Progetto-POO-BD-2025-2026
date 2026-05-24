@@ -23,9 +23,6 @@ public class PaginaProiezioniGUI {
         frameProiezioni.setContentPane(mainPanel);
         frameProiezioni.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameProiezioni.pack();
-        frameProiezioni.setVisible(true);
-
-        frameProiezioni.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         homeButton.addActionListener(new ActionListener() {
             @Override

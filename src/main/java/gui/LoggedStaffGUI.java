@@ -18,7 +18,7 @@ public class LoggedStaffGUI {
         return this.frameLoggedStaff;
     }
 
-    public LoggedStaffGUI(JFrame frameHome, JFrame frameLocalHome, Controller controller) {
+    public LoggedStaffGUI(JFrame frameHome, Controller controller) {
         frameLoggedStaff = new JFrame("LoggedStaffGUI");
         frameLoggedStaff.setContentPane(mainPanel);
         frameLoggedStaff.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

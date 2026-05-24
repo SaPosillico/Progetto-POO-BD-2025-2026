@@ -3,7 +3,6 @@ package gui;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import controller.*;
 
 public class PaginaLogInGUI {
@@ -12,10 +11,7 @@ public class PaginaLogInGUI {
     private JButton filmButton;
     private JButton proiezioniButton;
     private JButton logInButton;
-    private JTextField emailTextField;
-    private JTextField passwordTextField;
-    private JLabel benvenutoLabel;
-    private JButton invioButton;
+    private JTabbedPane accessTabbedPane;
     private JFrame frameLogIn;
 
     public JFrame getFrame() {
@@ -27,59 +23,6 @@ public class PaginaLogInGUI {
         frameLogIn.setContentPane(mianPanel);
         frameLogIn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameLogIn.pack();
-        frameLogIn.setVisible(true);
-        frameLogIn.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        benvenutoLabel.setText("Benvenuto! Inserisci qui i dati del tuo account.");
-
-        //AR: non riuscivo a centrare la label
-        //benvenutoLabel.setPreferredSize(new java.awt.Dimension(2000, 100));
-
-        benvenutoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        benvenutoLabel.setVerticalAlignment(SwingConstants.CENTER);
-
-
-        emailTextField.setText("Email");
-
-        emailTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent e) {
-                if (emailTextField.getText().equals("Email")) {
-                    emailTextField.setText("");
-                }
-            }
-
-            @Override
-            public void focusLost(java.awt.event.FocusEvent e) {
-                if (emailTextField.getText().isEmpty()) {
-                    emailTextField.setText("Email");
-                }
-            }
-        });
-
-
-        passwordTextField.setText("Password");
-
-        passwordTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent e) {
-                if (passwordTextField.getText().equals("Password")) {
-                    passwordTextField.setText("");
-                }
-            }
-
-            @Override
-            public void focusLost(java.awt.event.FocusEvent e) {
-                if (passwordTextField.getText().isEmpty()) {
-                    passwordTextField.setText("Password");
-                }
-            }
-        });
-
-
-        invioButton.setText("Invio");
-        invioButton.setPreferredSize(new java.awt.Dimension(200, 50));
-
 
         homeButton.addActionListener(new ActionListener() {
             @Override
@@ -99,11 +42,13 @@ public class PaginaLogInGUI {
                 controller.changeFrame(new PaginaProiezioniGUI(frameHome,controller).getFrame());
             }
         });
-        invioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
+
+        PannelloLogInCliente loginCliente = new PannelloLogInCliente(frameHome,controller);
+        PannelloLogInAdmin loginAdmin = new PannelloLogInAdmin(frameHome, controller);
+
+        // 3. Aggiungiamo i pannelli come schede
+        accessTabbedPane.addTab("Area Clienti", loginCliente);
+        accessTabbedPane.addTab("Area Staff / Admin", loginAdmin);
+
     }
 }
