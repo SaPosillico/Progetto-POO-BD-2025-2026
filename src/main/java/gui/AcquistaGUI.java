@@ -70,6 +70,7 @@ public class AcquistaGUI {
             public void actionPerformed(ActionEvent e) {
                 if(controller.checkPurchaseDetails(filmSelector.getSelectedItem().toString(),projectionSelector.getSelectedItem().toString(),campoNumeroBiglietti.getText())){
                     JOptionPane.showMessageDialog(null,"Biglietti acquistati, per il pagamento recarsi fisicamente alla cassa con almeno un'ora di anticipo rispetto l'inizio della proiezione.");
+                    controller.changeFrame(frameLocalHome);
                 }
                 else{
                     JOptionPane.showMessageDialog(null,"Errore durante la procedura di acquisto, ritentare.");

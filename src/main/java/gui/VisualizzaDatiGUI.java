@@ -14,6 +14,9 @@ public class VisualizzaDatiGUI {
     private JButton visualizzaDatiButton;
     private JButton inserisciDatiButton;
     private JButton logOutButton;
+    private JLabel totBiglietti;
+    private JLabel valutazioniMedie;
+    private JLabel bestFilm;
     private JFrame frameVisualizzaDati;
 
     public JFrame getFrame(){
@@ -50,5 +53,7 @@ public class VisualizzaDatiGUI {
                 controller.changeFrame(frameHome);
             }
         });
+
+        controller.visualizzaDati(totBiglietti,valutazioniMedie,bestFilm);
     }
 }

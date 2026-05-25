@@ -115,6 +115,9 @@ public class Controller {
         listaFilm.getFirst().addProiezione(p1);
         listaFilm.getFirst().addProiezione(p2);
         listaFilm.getFirst().addProiezione(p3);
+        membriDelloStaff.getFirst().addTurniEffettuati(t1);
+        membriDelloStaff.getLast().addTurniEffettuati(t2);
+        membriDelloStaff.getLast().addTurniEffettuati(t3);
     }
 
     public boolean checkClientLogInDetails(String email, String password, Controller controller, JFrame frameHome){
@@ -219,7 +222,7 @@ public class Controller {
     }
 
     public void creaListaFilm(JComboBox filmSelector){
-        filmSelector.addItem("");
+        //filmSelector.addItem("");
         for(Film f : listaFilm){
             filmSelector.addItem(f.getTitolo());
         }
@@ -251,5 +254,77 @@ public class Controller {
                 return false;
             }
         }
+    }
+
+    public void creaListaValutazione(JComboBox<String> valutazione) {
+        valutazione.removeAll();
+        for (int i = 0; i < 5; i++) {
+            valutazione.addItem(String.valueOf(i + 1));
+        }
+    }
+
+    public void aggiungiRecensione(String film, String valutazione, String descrizione, Cliente cliente) {
+        if (film == null || valutazione == null) return;
+
+        Film filmTrovato = null;
+        for (Film f : listaFilm) {
+            if (f.getTitolo().equals(film)) {
+                filmTrovato = f;
+                break;
+            }
+        }
+
+        if (filmTrovato != null) {
+            Recensione nuovaRecensione = new Recensione(Integer.parseInt(valutazione), descrizione, cliente, filmTrovato);
+            cliente.addRecenzione(nuovaRecensione);
+            filmTrovato.addRecensione(nuovaRecensione);
+        }
+    }
+
+    public void mostraDatiTurno(JPanel pannelloDettagli, Staff membro){
+        pannelloDettagli.add(new JLabel("Ora inizio:"));
+        pannelloDettagli.add(new JLabel(membro.getTurniEffettuati().getLast().getOraInizioTurno().toString()));
+        pannelloDettagli.add(new JLabel("Ora fine:"));
+        pannelloDettagli.add(new JLabel(membro.getTurniEffettuati().getLast().getOraFineTurno().toString()));
+        pannelloDettagli.add(new JLabel("Mansioni:"));
+        pannelloDettagli.add(new JLabel(membro.getTurniEffettuati().getLast().getMansione()));
+        pannelloDettagli.add(new JLabel("Tipologia:"));
+        if(membro.getTurniEffettuati().getLast().getOraInizioTurno().equals(membro.getTurniEffettuati().get(membro.getTurniEffettuati().size()-2).getOraFineTurno())){
+            pannelloDettagli.add(new Label("Straordinario, x1,5 sullo stipendio orario per questo turno."));
+        }
+        else{
+            pannelloDettagli.add(new Label("Ordinario"));
+        }
+    }
+
+    public void visualizzaDati(JLabel biglietti, JLabel valutazioni, JLabel bestFilm){
+        int totaleBigliettiVenduti=0, totaleRecensioni=0, sommeValutazioni=0, sommaBiglietti, migliorFilm=-1;
+        String filmTrovato = "No data.";
+        for(Biglietto b : bigliettiVenduti){
+            totaleBigliettiVenduti+=1;
+        }
+        biglietti.setText(""+totaleBigliettiVenduti);
+
+        for(Recensione r : recensioni){
+            totaleRecensioni += 1;
+            sommeValutazioni += r.getValutazione();
+        }
+        valutazioni.setText(""+(double)sommeValutazioni/totaleRecensioni);
+
+        for(Film f : listaFilm){
+            sommaBiglietti =0;
+            if(f.getProiezioni() != null){
+                for(Proiezione p : f.getProiezioni()){
+                    if(p.getBigliettiVenduti() != null){
+                        sommaBiglietti += p.getBigliettiVenduti().size();
+                    }
+                }
+                if(sommaBiglietti>migliorFilm){
+                    migliorFilm = sommaBiglietti;
+                    filmTrovato = f.getTitolo();
+                }
+            }
+        }
+        bestFilm.setText(filmTrovato);
     }
 }

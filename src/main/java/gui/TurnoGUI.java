@@ -14,6 +14,7 @@ public class TurnoGUI {
     private JButton visualizzaDatiButton;
     private JButton inserisciDatiButton;
     private JButton logOutButton;
+    private JPanel pannelloDettagli;
     private JFrame frameTurno;
 
     public JFrame getFrame(){
@@ -50,5 +51,7 @@ public class TurnoGUI {
                 controller.changeFrame(frameHome);
             }
         });
+
+        controller.mostraDatiTurno(pannelloDettagli,membro);
     }
 }
