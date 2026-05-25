@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 
 public class InserisciDatiGUI {
     private JPanel mainPanel;
-    private JButton homeButton;
     private JButton dettagliTurnoButton;
     private JButton visualizzaDatiButton;
     private JButton inserisciDatiButton;
@@ -26,12 +25,6 @@ public class InserisciDatiGUI {
         frameInserisciDati.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameInserisciDati.pack();
 
-        homeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(frameLocalHome);
-            }
-        });
         dettagliTurnoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

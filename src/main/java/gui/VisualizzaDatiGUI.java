@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 
 public class VisualizzaDatiGUI {
     private JPanel mainPanel;
-    private JButton homeButton;
     private JButton dettagliTurnoButton;
     private JButton visualizzaDatiButton;
     private JButton inserisciDatiButton;
@@ -29,12 +28,6 @@ public class VisualizzaDatiGUI {
         frameVisualizzaDati.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameVisualizzaDati.pack();
 
-        homeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(frameLocalHome);
-            }
-        });
         dettagliTurnoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

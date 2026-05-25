@@ -12,6 +12,7 @@ public class PaginaLogInGUI {
     private JButton proiezioniButton;
     private JButton logInButton;
     private JTabbedPane accessTabbedPane;
+    private JLabel benvenutoLabel;
     private JFrame frameLogIn;
 
     public JFrame getFrame() {
