@@ -25,6 +25,8 @@ public class PaginaLogInGUI {
         frameLogIn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameLogIn.pack();
 
+        benvenutoLabel.setText("<html><div style='text-align: center;'>Benvenuto!<br>Inserisci i dati per effettuare il login</div></html>");
+
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

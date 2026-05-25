@@ -44,7 +44,7 @@ public class LoggedClientGUI {
                 controller.changeFrame(frameHome);
             }
         });
-        labelBenvenuto.setText("Bemvenuto "+cliente.getNome());
+        labelBenvenuto.setText("Benvenuto, "+cliente.getNome()+"!");
         controller.aggiornaListaBiglietti(listaBigliettiAcquistati,cliente);
     }
 }
