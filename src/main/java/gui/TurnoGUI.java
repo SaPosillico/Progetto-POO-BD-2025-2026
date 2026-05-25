@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 
 public class TurnoGUI {
     private JPanel mainPanel;
-    private JButton homeButton;
     private JButton dettagliTurnoButton;
     private JButton visualizzaDatiButton;
     private JButton inserisciDatiButton;
@@ -21,28 +20,22 @@ public class TurnoGUI {
         return this.frameTurno;
     }
 
-    public TurnoGUI(JFrame frameHome, JFrame frameLocalHome, Controller controller, Staff membro) {
+    public TurnoGUI(JFrame frameHome, Controller controller, Staff membro) {
         frameTurno = new JFrame("LoggedStaffGUI");
         frameTurno.setContentPane(mainPanel);
         frameTurno.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameTurno.pack();
 
-        homeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(frameLocalHome);
-            }
-        });
         visualizzaDatiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(new VisualizzaDatiGUI(frameHome,frameLocalHome,controller,membro).getFrame());
+                controller.changeFrame(new VisualizzaDatiGUI(frameHome,controller,membro).getFrame());
             }
         });
         inserisciDatiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(new InserisciDatiGUI(frameHome,frameLocalHome,controller,membro).getFrame());
+                controller.changeFrame(new InserisciDatiGUI(frameHome,controller,membro).getFrame());
             }
         });
         logOutButton.addActionListener(new ActionListener() {

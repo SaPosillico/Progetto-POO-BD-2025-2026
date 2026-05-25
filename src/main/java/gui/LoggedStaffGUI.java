@@ -29,19 +29,19 @@ public class LoggedStaffGUI {
         dettagliTurnoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(new TurnoGUI(frameHome,frameLoggedStaff,controller,membro).getFrame());
+                controller.changeFrame(new TurnoGUI(frameHome,controller,membro).getFrame());
             }
         });
         visualizzaDatiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(new VisualizzaDatiGUI(frameHome,frameLoggedStaff,controller,membro).getFrame());
+                controller.changeFrame(new VisualizzaDatiGUI(frameHome,controller,membro).getFrame());
             }
         });
         inserisciDatiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(new InserisciDatiGUI(frameHome,frameLoggedStaff,controller,membro).getFrame());
+                controller.changeFrame(new InserisciDatiGUI(frameHome,controller,membro).getFrame());
             }
         });
         logOutButton.addActionListener(new ActionListener() {

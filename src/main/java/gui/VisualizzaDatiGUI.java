@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 
 public class VisualizzaDatiGUI {
     private JPanel mainPanel;
-    private JButton homeButton;
     private JButton dettagliTurnoButton;
     private JButton visualizzaDatiButton;
     private JButton inserisciDatiButton;
@@ -23,28 +22,22 @@ public class VisualizzaDatiGUI {
         return this.frameVisualizzaDati;
     }
 
-    public VisualizzaDatiGUI(JFrame frameHome, JFrame frameLocalHome, Controller controller, Staff membro) {
+    public VisualizzaDatiGUI(JFrame frameHome, Controller controller, Staff membro) {
         frameVisualizzaDati = new JFrame("LoggedStaffGUI");
         frameVisualizzaDati.setContentPane(mainPanel);
         frameVisualizzaDati.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameVisualizzaDati.pack();
 
-        homeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(frameLocalHome);
-            }
-        });
         dettagliTurnoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(new TurnoGUI(frameHome,frameLocalHome,controller,membro).getFrame());
+                controller.changeFrame(new TurnoGUI(frameHome,controller,membro).getFrame());
             }
         });
         inserisciDatiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.changeFrame(new InserisciDatiGUI(frameHome,frameLocalHome,controller,membro).getFrame());
+                controller.changeFrame(new InserisciDatiGUI(frameHome,controller,membro).getFrame());
             }
         });
         logOutButton.addActionListener(new ActionListener() {

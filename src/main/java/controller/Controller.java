@@ -7,6 +7,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class Controller {
@@ -133,7 +135,7 @@ public class Controller {
     public boolean checkAdminLogInDetails(String user, int matricola, Controller controller, JFrame frameHome){
         for(Staff s : membriDelloStaff){
             if((s.getNome()+"."+s.getCognome()).equals(user) && s.getMatricola()==matricola){
-                changeFrame(new LoggedStaffGUI(frameHome,controller,s).getFrame());
+                changeFrame(new TurnoGUI(frameHome,controller,s).getFrame());
                 return true;
             }
         }
@@ -326,5 +328,71 @@ public class Controller {
             }
         }
         bestFilm.setText(filmTrovato);
+    }
+
+    public void aggiungiValoriPerSelezione(JComboBox genere, JComboBox rating, JComboBox sala){
+        for(Genere g : Genere.values()){
+            genere.addItem(g);
+        }
+
+        for(Rating r : Rating.values()){
+            rating.addItem(r);
+        }
+
+        for(Sala s : listaSale){
+            sala.addItem(s.getNumeroSala());
+        }
+    }
+
+    public boolean isDataValida(String data) {
+        if (data == null || data.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            // Definiamo il pattern personalizzato
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate.parse(data, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+    public boolean isLocalTimeValido(String ora) {
+        if (ora == null || ora.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            LocalTime.parse(ora);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+    public boolean aggiungiProiezione(Film film, String giorno, String oraInizio, String oraFine, String sala){
+        if (isDataValida(giorno) && isLocalTimeValido(oraInizio) && isLocalTimeValido(oraFine)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            for(Sala s : listaSale){
+                if(s.getNumeroSala()==Integer.parseInt(sala)){
+                    Proiezione nuovaProiezione = new Proiezione(LocalDate.parse(giorno, formatter),LocalTime.parse(oraInizio),LocalTime.parse(oraFine),s,film);
+                    film.addProiezione(nuovaProiezione);
+                    listaProiezioni.add(nuovaProiezione);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean aggiungiFilmOProiezione(String titolo, String regista, Genere genere, Rating rating, String giorno, String oraInizio, String oraFine, String sala){
+        for(Film f : listaFilm){
+            if(f.getTitolo().equals(titolo)){
+                return aggiungiProiezione(f,giorno,oraInizio,oraFine,sala);
+            }
+        }
+        Film nuovoFilm = new Film(titolo,regista,genere,rating);
+        listaFilm.add(nuovoFilm);
+        return aggiungiProiezione(nuovoFilm,giorno,oraInizio,oraFine,sala);
     }
 }
