@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import controller.*;
 
+/**
+ * The type Pagina log in gui.
+ */
 public class PaginaLogInGUI {
     private JPanel mianPanel;
     private JButton homeButton;
@@ -15,10 +18,21 @@ public class PaginaLogInGUI {
     private JLabel benvenutoLabel;
     private JFrame frameLogIn;
 
+    /**
+     * Gets frame.
+     *
+     * @return the frame
+     */
     public JFrame getFrame() {
         return this.frameLogIn;
     }
 
+    /**
+     * Instantiates a new Pagina log in gui.
+     *
+     * @param frameHome  the frame home
+     * @param controller the controller
+     */
     public PaginaLogInGUI(JFrame frameHome, Controller controller) {
         frameLogIn = new JFrame("PaginaLogInGUI");
         frameLogIn.setContentPane(mianPanel);

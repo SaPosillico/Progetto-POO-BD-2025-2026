@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import controller.*;
 
+/**
+ * The type Pagina proiezioni gui.
+ */
 public class PaginaProiezioniGUI {
     private JPanel mainPanel;
     private JPanel buttonPanel;
@@ -15,10 +18,21 @@ public class PaginaProiezioniGUI {
     private JTable projectionTable;
     private JFrame frameProiezioni;
 
+    /**
+     * Gets frame.
+     *
+     * @return the frame
+     */
     public JFrame getFrame() {
         return this.frameProiezioni;
     }
 
+    /**
+     * Instantiates a new Pagina proiezioni gui.
+     *
+     * @param frameHome  the frame home
+     * @param controller the controller
+     */
     public PaginaProiezioniGUI(JFrame frameHome, Controller controller) {
         frameProiezioni = new JFrame("PaginaProiezioniGUI");
         frameProiezioni.setContentPane(mainPanel);

@@ -7,11 +7,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Pannello log in cliente.
+ */
 public class PannelloLogInCliente extends JPanel {
     private JTextField campoEmail;
     private JPasswordField campoPassword;
     private JButton pulsanteAccesso;
 
+    /**
+     * Instantiates a new Pannello log in cliente.
+     *
+     * @param frameHome  the frame home
+     * @param controller the controller
+     */
     public PannelloLogInCliente(JFrame frameHome, Controller controller) {
         setLayout(new GridLayout(3, 2, 10, 10)); // Un layout semplice a griglia
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -42,7 +51,24 @@ public class PannelloLogInCliente extends JPanel {
         });
     }
 
+    /**
+     * Gets bottone accedi.
+     *
+     * @return the bottone accedi
+     */
     public JButton getBottoneAccedi() { return pulsanteAccesso; }
+
+    /**
+     * Gets email.
+     *
+     * @return the email
+     */
     public String getEmail() { return campoEmail.getText(); }
+
+    /**
+     * Gets password.
+     *
+     * @return the password
+     */
     public String getPassword() { return new String(campoPassword.getPassword()); }
 }

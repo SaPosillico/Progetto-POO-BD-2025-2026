@@ -1,0 +1,9 @@
+Cambiamenti
+Rispetto al primo homework, sono state apportate modifiche al class diagram, in particolare sono stati aggiunti:
+attributo password nella classe Cliente, che usa per accedere alla sezione dedicata dell'applicativo;
+il metodo logIn() nella classe Cliente;
+il metodo logIn() nella classe Staff;
+il metodo inserisciFilmoProiezioni() nella classe Staff;
+
+ed è stato rimosso:
+il metodo pulisciSala() dalla classe Staff;

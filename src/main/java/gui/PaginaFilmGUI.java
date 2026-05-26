@@ -6,6 +6,9 @@ import controller.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Pagina film gui.
+ */
 public class PaginaFilmGUI {
     private JPanel mainPanel;
     private JPanel buttonPanel;
@@ -17,10 +20,21 @@ public class PaginaFilmGUI {
     private JPanel sezioneFilm;
     private JFrame frameFilm;
 
+    /**
+     * Gets frame.
+     *
+     * @return the frame
+     */
     public JFrame getFrame() {
         return this.frameFilm;
     }
 
+    /**
+     * Instantiates a new Pagina film gui.
+     *
+     * @param frameHome  the frame home
+     * @param controller the controller
+     */
     public PaginaFilmGUI(JFrame frameHome, Controller controller) {
         frameFilm = new JFrame("PaginaFilmGUI");
         frameFilm.setContentPane(mainPanel);

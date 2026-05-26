@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import controller.*;
 import model.Cliente;
 
+/**
+ * The type Recensione gui.
+ */
 public class RecensioneGUI {
     private JPanel mainPanel;
     private JButton homeButton;
@@ -18,10 +21,23 @@ public class RecensioneGUI {
     private JButton pulsanteRecensione;
     private JFrame frameRecensione;
 
+    /**
+     * Gets frame.
+     *
+     * @return the frame
+     */
     public JFrame getFrame() {
         return this.frameRecensione;
     }
 
+    /**
+     * Instantiates a new Recensione gui.
+     *
+     * @param frameHome      the frame home
+     * @param frameLocalHome the frame local home
+     * @param controller     the controller
+     * @param cliente        the cliente
+     */
     public RecensioneGUI(JFrame frameHome, JFrame frameLocalHome, Controller controller, Cliente cliente) {
         frameRecensione= new JFrame("RecensioneGUI");
         frameRecensione.setContentPane(mainPanel);

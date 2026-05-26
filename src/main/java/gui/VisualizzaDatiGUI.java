@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Visualizza dati gui.
+ */
 public class VisualizzaDatiGUI {
     private JPanel mainPanel;
     private JButton dettagliTurnoButton;
@@ -18,10 +21,22 @@ public class VisualizzaDatiGUI {
     private JLabel bestFilm;
     private JFrame frameVisualizzaDati;
 
+    /**
+     * Get frame j frame.
+     *
+     * @return the j frame
+     */
     public JFrame getFrame(){
         return this.frameVisualizzaDati;
     }
 
+    /**
+     * Instantiates a new Visualizza dati gui.
+     *
+     * @param frameHome  the frame home
+     * @param controller the controller
+     * @param membro     the membro
+     */
     public VisualizzaDatiGUI(JFrame frameHome, Controller controller, Staff membro) {
         frameVisualizzaDati = new JFrame("LoggedStaffGUI");
         frameVisualizzaDati.setContentPane(mainPanel);

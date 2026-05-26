@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import controller.*;
 import model.Cliente;
 
+/**
+ * The type Logged client gui.
+ */
 public class LoggedClientGUI {
     private JPanel mainPanel;
     private JButton homeButton;
@@ -16,10 +19,22 @@ public class LoggedClientGUI {
     private JList listaBigliettiAcquistati;
     private JFrame frameLoggedClient;
 
+    /**
+     * Get frame j frame.
+     *
+     * @return the j frame
+     */
     public JFrame getFrame(){
         return this.frameLoggedClient;
     }
 
+    /**
+     * Instantiates a new Logged client gui.
+     *
+     * @param frameHome  the frame home
+     * @param controller the controller
+     * @param cliente    the cliente
+     */
     public LoggedClientGUI(JFrame frameHome, Controller controller, Cliente cliente) {
         frameLoggedClient = new JFrame("LoggedClientGUI");
         frameLoggedClient.setContentPane(mainPanel);

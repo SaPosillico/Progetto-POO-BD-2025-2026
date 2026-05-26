@@ -9,6 +9,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Inserisci dati gui.
+ */
 public class InserisciDatiGUI {
     private JPanel mainPanel;
     private JButton dettagliTurnoButton;
@@ -26,10 +29,22 @@ public class InserisciDatiGUI {
     private JComboBox campoSala;
     private JFrame frameInserisciDati;
 
+    /**
+     * Get frame j frame.
+     *
+     * @return the j frame
+     */
     public JFrame getFrame(){
         return this.frameInserisciDati;
     }
 
+    /**
+     * Instantiates a new Inserisci dati gui.
+     *
+     * @param frameHome  the frame home
+     * @param controller the controller
+     * @param membro     the membro
+     */
     public InserisciDatiGUI(JFrame frameHome, Controller controller, Staff membro) {
         frameInserisciDati = new JFrame("LoggedStaffGUI");
         frameInserisciDati.setContentPane(mainPanel);

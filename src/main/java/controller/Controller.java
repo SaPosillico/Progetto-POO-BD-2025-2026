@@ -11,6 +11,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
+/**
+ * The type Controller.
+ */
 public class Controller {
     private JFrame frameAttuale;
     private ArrayList<Cliente> listaClienti;
@@ -23,8 +26,16 @@ public class Controller {
     private ArrayList<Recensione> recensioni;
     private ArrayList<Turno> turniAssegnati;
     private ArrayList<Pagamento> elencoPagamenti;
+    /**
+     * Il Modello della lista è necessario per inserire i dati nella lista dei biglietti acquistati.
+     */
     public static DefaultListModel<Biglietto> modelloLista;
 
+    /**
+     * Instantiates a new Controller.
+     *
+     * @param frameHome il frame home
+     */
     public Controller(JFrame frameHome){
         frameAttuale = frameHome;
         listaClienti = new ArrayList<>();
@@ -40,6 +51,9 @@ public class Controller {
         inserisciDatiTest();
     }
 
+    /**
+     * Crea degli oggetti a solo scopo di test del funzionamento complessivo dell'applicativo.
+     */
     public void inserisciDatiTest(){
         Cliente c1 = new Cliente("a@gmail.com","Mario","Rossi","mario.rossi");
         Cliente c2 = new Cliente("b@gmail.com","Luca","Rossi","luca.rossi");
@@ -122,6 +136,16 @@ public class Controller {
         membriDelloStaff.getLast().addTurniEffettuati(t3);
     }
 
+    /**
+     * Controlla i dati di accesso dei clienti e restituisce un valore booleano che permette di dare indicazioni riguardo il successo dell'operazione di accesso.
+     * Inoltre, in caso positivo, cambia anche il frame con quello della pagina home per i clienti "LoggedClientGUI".
+     *
+     * @param email      email del cliente
+     * @param password   the password del cliente
+     * @param controller the controller
+     * @param frameHome  the frame home
+     * @return the boolean
+     */
     public boolean checkClientLogInDetails(String email, String password, Controller controller, JFrame frameHome){
         for (Cliente c : listaClienti){
             if(c.getEmail().equals(email)){
@@ -132,6 +156,16 @@ public class Controller {
         return false;
     }
 
+    /**
+     * Controlla i dati di accesso dello staff e restituisce un valore booleano che permette di dare indicazioni riguardo il successo dell'operazione di accesso.
+     * Inoltre, in caso positivo, cambia anche il frame con quello della pagina home per lo staff "TurnoGUI".
+     *
+     * @param user       l'user che corrisponde a Nome.cognome
+     * @param matricola  la matricola
+     * @param controller il controller
+     * @param frameHome  il frame home
+     * @return the boolean
+     */
     public boolean checkAdminLogInDetails(String user, int matricola, Controller controller, JFrame frameHome){
         for(Staff s : membriDelloStaff){
             if((s.getNome()+"."+s.getCognome()).equals(user) && s.getMatricola()==matricola){
@@ -142,6 +176,12 @@ public class Controller {
         return false;
     }
 
+    /**
+     * Permette di cambiare frame aprendo quello nuovo con le dimensioni massime.
+     * Esegue queste operazioni nel modo più "liscio" possibile, aprendo prima il nuovo frame e chiudendo il vecchio.
+     *
+     * @param nuovoFrame il nuovo frame da aprire
+     */
     public void changeFrame(JFrame nuovoFrame){
         if(nuovoFrame!=null){
             JFrame frameDaChiudere = this.frameAttuale;
@@ -154,6 +194,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Prendendo in ingresso il pannello "pannelloDati", con un ciclo for, lo riempie von delle label per descrivere gli attributi di ciascun film.
+     * Esegue anche una formattazione dei contenuti, separando i dati del singolo film in dei panel temporanei.
+     *
+     * @param pannelloDati il pannello dati
+     */
     public void popolaElencoFilm(JPanel pannelloDati){
         pannelloDati.removeAll();
         pannelloDati.setLayout(new BoxLayout(pannelloDati, BoxLayout.Y_AXIS));
@@ -188,6 +234,11 @@ public class Controller {
         pannelloDati.repaint();
     }
 
+    /**
+     * Riempie la tabella contenente i dati di tutte le proiezioni usando un ciclo for per recuperare tutti i dati.
+     *
+     * @param tabella la tabella che contiene i dati.
+     */
     public void aggiornaTabellaProiezioni(JTable tabella) {
         String[] colonne = {"Film", "Sala", "Data", "Inizio","Fine"};
 
@@ -213,6 +264,12 @@ public class Controller {
         tabella.setModel(model);
     }
 
+    /**
+     * Riempie la lista dei biglietti acquistati da un certo cliente
+     *
+     * @param listaBigliettiAcquistati la lista biglietti acquistati
+     * @param cliente                  il cliente corrispondente
+     */
     public void aggiornaListaBiglietti(JList listaBigliettiAcquistati, Cliente cliente){
         modelloLista = new DefaultListModel<Biglietto>();
         ArrayList<Biglietto> bigliettiTrovati = new ArrayList<>();
@@ -223,16 +280,25 @@ public class Controller {
         listaBigliettiAcquistati.setModel(modelloLista);
     }
 
+    /**
+     * Aggiunge i film ad una JComboBox per poterne scegliere uno durante l'acquisto dei biglietti.
+     *
+     * @param filmSelector la JComboBox per scegliere il film
+     */
     public void creaListaFilm(JComboBox filmSelector){
-        //filmSelector.addItem("");
         for(Film f : listaFilm){
             filmSelector.addItem(f.getTitolo());
         }
     }
 
+    /**
+     * Crea la lista delle proiezioni partendo dal film selezionato
+     *
+     * @param projectionSelector la JComboBox per scegliere la proiezione
+     * @param film               il film selezionato
+     */
     public void creaListaProiezioni(JComboBox projectionSelector, String film){
         projectionSelector.removeAll();
-        //projectionSelector.addItem("");
         for(Film f : listaFilm){
             if(f.getTitolo().equals(film)){
                 for(Proiezione p : f.getProiezioni()){
@@ -243,6 +309,14 @@ public class Controller {
         }
     }
 
+    /**
+     * Controlla i dati inseriti e conferma o no l'acquisto dei biglietti.
+     *
+     * @param film            il film selezioanto
+     * @param proiezione      la proiezione scelta
+     * @param numeroBiglietti il numero biglietti acquistati
+     * @return the boolean
+     */
     public boolean checkPurchaseDetails(String film, String proiezione, String numeroBiglietti){
         if(numeroBiglietti==null || numeroBiglietti.isEmpty() || film.isEmpty() || proiezione.isEmpty()){
             return false;
@@ -258,6 +332,11 @@ public class Controller {
         }
     }
 
+    /**
+     * Crea la lista delle possibili valutazioni per lasciare una recensione.
+     *
+     * @param valutazione la JComboBox per poter dare una valutazione
+     */
     public void creaListaValutazione(JComboBox<String> valutazione) {
         valutazione.removeAll();
         for (int i = 0; i < 5; i++) {
@@ -265,6 +344,14 @@ public class Controller {
         }
     }
 
+    /**
+     * In base ai dati inseriti, conferma la loro conformità e inserisce la nuova recensione.
+     *
+     * @param film        il film recensito
+     * @param valutazione la valutazione scelta
+     * @param descrizione la descrizione data
+     * @param cliente     il cliente che ha lasciato la recensione
+     */
     public void aggiungiRecensione(String film, String valutazione, String descrizione, Cliente cliente) {
         if (film == null || valutazione == null) return;
 
@@ -283,6 +370,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Mostra i dati dell'ultimo turno differenziando anche se si tratta di un turno ordinario o di straordinari basandosi sugli orari del turno precedente.
+     *
+     * @param pannelloDettagli il pannello contenente i dettagli
+     * @param membro           il membro dello staff che ha eseguito il turno
+     */
     public void mostraDatiTurno(JPanel pannelloDettagli, Staff membro){
         pannelloDettagli.add(new JLabel("Ora inizio:"));
         pannelloDettagli.add(new JLabel(membro.getTurniEffettuati().getLast().getOraInizioTurno().toString()));
@@ -299,6 +392,13 @@ public class Controller {
         }
     }
 
+    /**
+     * Permette di visualizzare alcuni dei principali dati relativi alla gestione del cinema.
+     *
+     * @param biglietti   i biglietti venduti
+     * @param valutazioni la media delle valutazioni
+     * @param bestFilm    il miglior film per vendita di bigletti
+     */
     public void visualizzaDati(JLabel biglietti, JLabel valutazioni, JLabel bestFilm){
         int totaleBigliettiVenduti=0, totaleRecensioni=0, sommeValutazioni=0, sommaBiglietti, migliorFilm=-1;
         String filmTrovato = "No data.";
@@ -330,6 +430,13 @@ public class Controller {
         bestFilm.setText(filmTrovato);
     }
 
+    /**
+     * Aggiungi valori nelle JComboBox per poter inserire un nuovo film, con una proiezione già organizzata, o una nuova proiezione riguardo un film già presente nel sistema.
+     *
+     * @param genere il genere
+     * @param rating il rating
+     * @param sala   la sala
+     */
     public void aggiungiValoriPerSelezione(JComboBox genere, JComboBox rating, JComboBox sala){
         for(Genere g : Genere.values()){
             genere.addItem(g);
@@ -344,6 +451,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Controlla la conformità della data inserita relativa all'inserimento di una nuova proiezione.
+     *
+     * @param data la data
+     * @return the boolean
+     */
     public boolean isDataValida(String data) {
         if (data == null || data.trim().isEmpty()) {
             return false;
@@ -358,6 +471,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Controlla la conformità dell'orario inserito relativo all'inserimento di una nuova proiezione.
+     *
+     * @param ora l'ora
+     * @return the boolean
+     */
     public boolean isLocalTimeValido(String ora) {
         if (ora == null || ora.trim().isEmpty()) {
             return false;
@@ -370,6 +489,16 @@ public class Controller {
         }
     }
 
+    /**
+     * Aggiungi la nuova proiezione, con i relativi dati in seguito all'inserimento dei dati nella pagina di inserimento.
+     *
+     * @param film      il film
+     * @param giorno    il giorno
+     * @param oraInizio l'ora d'inizio
+     * @param oraFine   l'ora di fine
+     * @param sala      la sala
+     * @return the boolean
+     */
     public boolean aggiungiProiezione(Film film, String giorno, String oraInizio, String oraFine, String sala){
         if (isDataValida(giorno) && isLocalTimeValido(oraInizio) && isLocalTimeValido(oraFine)) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -385,6 +514,19 @@ public class Controller {
         return false;
     }
 
+    /**
+     * Aggiungi un nuovo film e/o una nuova proiezione in base ai dati inseriti nella pagina d'inserimento.
+     *
+     * @param titolo    il titolo
+     * @param regista   il regista
+     * @param genere    il genere
+     * @param rating    il rating
+     * @param giorno    il giorno
+     * @param oraInizio l'ora d'inizio
+     * @param oraFine   l'ora di fine
+     * @param sala      la sala
+     * @return the boolean
+     */
     public boolean aggiungiFilmOProiezione(String titolo, String regista, Genere genere, Rating rating, String giorno, String oraInizio, String oraFine, String sala){
         for(Film f : listaFilm){
             if(f.getTitolo().equals(titolo)){

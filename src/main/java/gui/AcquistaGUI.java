@@ -9,6 +9,9 @@ import java.awt.event.ItemListener;
 import controller.*;
 import model.Cliente;
 
+/**
+ * The type Acquista gui.
+ */
 public class AcquistaGUI {
     private JPanel mainPanel;
     private JButton homeButton;
@@ -21,10 +24,23 @@ public class AcquistaGUI {
     private JTextField campoNumeroBiglietti;
     private JFrame frameAcquista;
 
+    /**
+     * Gets frame.
+     *
+     * @return the frame
+     */
     public JFrame getFrame() {
         return this.frameAcquista;
     }
 
+    /**
+     * Instantiates a new Acquista gui.
+     *
+     * @param frameHome      the frame home
+     * @param frameLocalHome the frame local home
+     * @param controller     the controller
+     * @param cliente        the cliente
+     */
     public AcquistaGUI(JFrame frameHome, JFrame frameLocalHome, Controller controller, Cliente cliente) {
         frameAcquista= new JFrame("AcquistaGUI");
         frameAcquista.setContentPane(mainPanel);

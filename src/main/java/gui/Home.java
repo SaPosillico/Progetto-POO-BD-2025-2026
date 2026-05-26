@@ -5,6 +5,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Home.
+ */
 public class Home {
     private JPanel mainPanel;
     private JPanel buttonPanel;
@@ -16,6 +19,11 @@ public class Home {
     private static JFrame frameHome;
     private Controller controller;
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         frameHome = new JFrame("Home");
         frameHome.setContentPane(new Home().mainPanel);
@@ -25,10 +33,18 @@ public class Home {
         frameHome.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
+    /**
+     * Gets frame.
+     *
+     * @return the frame
+     */
     public JFrame getFrame() {
         return this.frameHome;
     }
 
+    /**
+     * Instantiates a new Home.
+     */
     public Home() {
         controller = new Controller(frameHome);
 

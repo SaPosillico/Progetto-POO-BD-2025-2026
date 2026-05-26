@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Turno gui.
+ */
 public class TurnoGUI {
     private JPanel mainPanel;
     private JButton dettagliTurnoButton;
@@ -16,10 +19,22 @@ public class TurnoGUI {
     private JPanel pannelloDettagli;
     private JFrame frameTurno;
 
+    /**
+     * Get frame j frame.
+     *
+     * @return the j frame
+     */
     public JFrame getFrame(){
         return this.frameTurno;
     }
 
+    /**
+     * Instantiates a new Turno gui.
+     *
+     * @param frameHome  the frame home
+     * @param controller the controller
+     * @param membro     the membro
+     */
     public TurnoGUI(JFrame frameHome, Controller controller, Staff membro) {
         frameTurno = new JFrame("LoggedStaffGUI");
         frameTurno.setContentPane(mainPanel);
