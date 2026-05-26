@@ -232,7 +232,7 @@ public class Controller {
 
     public void creaListaProiezioni(JComboBox projectionSelector, String film){
         projectionSelector.removeAll();
-        projectionSelector.addItem("");
+        //projectionSelector.addItem("");
         for(Film f : listaFilm){
             if(f.getTitolo().equals(film)){
                 for(Proiezione p : f.getProiezioni()){
