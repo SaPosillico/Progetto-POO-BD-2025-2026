@@ -27,7 +27,7 @@ public class BigliettoImplementazionePostgresDAO implements BigliettoDAO {
 
         try (PreparedStatement pr = connection.prepareStatement(sql)) {
             pr.setString(1,codiceBiglietto);
-            pr.setString(2,""+prezzo);
+            pr.setDouble(2,prezzo);
             pr.setString(3,matricola);
             pr.setString(4,idPagamento);
             pr.setString(5,codicePosto);

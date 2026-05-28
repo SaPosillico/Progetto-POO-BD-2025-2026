@@ -1,8 +1,10 @@
 package dao;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public interface ProiezioneDAO {
-    public void inserisciProiezione(String data, String ora_inizio, String ora_fine, String idFilm);
-    public void recuperaProiezioni(ArrayList<String> data, ArrayList<String> ora_inizio, ArrayList<String> ora_fine, ArrayList<String> idFilm);
+    public void inserisciProiezione(LocalDate data, LocalTime ora_inizio, LocalTime ora_fine, int idFilm);
+    public void recuperaProiezioni(ArrayList<LocalDate> data, ArrayList<LocalTime> ora_inizio, ArrayList<LocalTime> ora_fine, ArrayList<Integer> idFilm);
 }
