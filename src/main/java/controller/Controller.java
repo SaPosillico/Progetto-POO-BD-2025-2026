@@ -1,10 +1,15 @@
 package controller;
 
+import dao.*;
+import database.ConnessioneDatabase;
 import gui.*;
+import implementazionePostgresDAO.*;
 import model.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -26,6 +31,17 @@ public class Controller {
     private ArrayList<Recensione> recensioni;
     private ArrayList<Turno> turniAssegnati;
     private ArrayList<Pagamento> elencoPagamenti;
+    private BigliettoDAO bigliettoDAO;
+    private ClienteDAO clienteDAO;
+    private FilmDAO filmDAO;
+    private ProiezioneDAO proiezioneDAO;
+    private SalaDAO salaDAO;
+    private RecensioneDAO recensioneDAO;
+    private TurnoDAO turnoDAO;
+    private PagamentoDAO pagamentoDAO;
+    private PostoDAO postoDAO;
+    private StaffDAO staffDAO;
+    private Connection connection;
     /**
      * Il Modello della lista è necessario per inserire i dati nella lista dei biglietti acquistati.
      */
@@ -48,93 +64,173 @@ public class Controller {
         recensioni = new ArrayList<>();
         turniAssegnati = new ArrayList<>();
         elencoPagamenti = new ArrayList<>();
-        inserisciDatiTest();
+
+        inizializzaConnessioneDB();
+        bigliettoDAO = new BigliettoImplementazionePostgresDAO(this.connection);
+        clienteDAO = new ClienteImplementazionePostgresDAO(this.connection);
+        filmDAO = new FilmImplementazionePostgresDAO(this.connection);
+        recensioneDAO = new RecensioneImplementazionePostgresDAO(this.connection);
+        pagamentoDAO = new PagamentoImplementazionePostgresDAO(this.connection);
+        postoDAO = new PostoImplementazionePostgresDAO(this.connection);
+        staffDAO = new StaffImplementazionePostgresDAO(this.connection);
+        proiezioneDAO = new ProiezioneImplementazionePostgresDAO(this.connection);
+        salaDAO = new SalaImplementazionePostgresDAO(this.connection);
+        turnoDAO = new TurnoImplementazionePostgresDAO(this.connection);
+        inizializzaListe();
     }
 
+
+    private void inizializzaConnessioneDB() {
+        try {
+            this.connection = ConnessioneDatabase.getInstance().connection;
+
+            if (this.connection == null || this.connection.isClosed()) {
+                System.out.println("[Controller] Errore durante la connessione.");
+            }
+        } catch (SQLException e) {
+            System.err.println("[Controller] Errore critico: Impossibile connettersi al database!");
+            e.printStackTrace();
+        }
+    }
     /**
      * Crea degli oggetti a solo scopo di test del funzionamento complessivo dell'applicativo.
      */
-    public void inserisciDatiTest(){
-        Cliente c1 = new Cliente("a@gmail.com","Mario","Rossi","mario.rossi");
-        Cliente c2 = new Cliente("b@gmail.com","Luca","Rossi","luca.rossi");
-        Cliente c3 = new Cliente("c@gmail.com","Marco","Rossi","marco.rossi");
-        listaClienti.add(c1);
-        listaClienti.add(c2);
-        listaClienti.add(c3);
-
-        Staff s1 = new Staff(1,"Ant","Ros",12.5);
-        Staff s2 = new Staff(2,"Ant","Ter",12.5);
-        Staff s3 = new Staff(3,"Sal","Pos",12.5);
-        membriDelloStaff.add(s1);
-        membriDelloStaff.add(s2);
-        membriDelloStaff.add(s3);
-
-        Film f1 = new Film("film1","regista1",Genere.Thriller,Rating.VM18);
-        Film f2 = new Film("film2","regista1",Genere.Avventura,Rating.VM14);
-        Film f3 = new Film("film3","regista2",Genere.Fantasy,Rating.PerTutti);
-        listaFilm.add(f1);
-        listaFilm.add(f2);
-        listaFilm.add(f3);
-
-        Sala sa1 = new Sala(1,30);
-        Sala sa2 = new Sala(2,150);
-        Sala sa3 = new Sala(3,75);
-        listaSale.add(sa1);
-        listaSale.add(sa2);
-        listaSale.add(sa3);
-
-        Proiezione p1 = new Proiezione(LocalDate.of(2026,6,12), LocalTime.of(20,30), LocalTime.of(22,30),sa1,f2);
-        Proiezione p2 = new Proiezione(LocalDate.of(2026,6,13), LocalTime.of(20,30), LocalTime.of(22,30),sa2,f2);
-        Proiezione p3 = new Proiezione(LocalDate.of(2026,6,20), LocalTime.of(20,30), LocalTime.of(22,30),sa1,f3);
-        listaProiezioni.add(p1);
-        listaProiezioni.add(p2);
-        listaProiezioni.add(p3);
-
-        Posto po1 = new Posto(1,'a',12,sa1);
-        Posto po2 = new Posto(2,'a',10,sa1);
-        Posto po3 = new Posto(3,'a',5,sa1);
-        listaPosti.add(po1);
-        listaPosti.add(po2);
-        listaPosti.add(po3);
-
-        Pagamento pag1 = new Pagamento("contante",14,LocalDate.of(2026,7,11),LocalTime.now(),c1);
-        Pagamento pag2 = new Pagamento("contante",70,LocalDate.of(2026,7,21),LocalTime.now(),c2);
-        Pagamento pag3 = new Pagamento("contante",35,LocalDate.of(2026,8,11),LocalTime.now(),c3);
-        elencoPagamenti.add(pag1);
-        elencoPagamenti.add(pag2);
-        elencoPagamenti.add(pag3);
-
-        Biglietto b1 = new Biglietto(1,7,po1,p1,s1,pag1);
-        Biglietto b2 = new Biglietto(2,7,po2,p3,s2,pag2);
-        Biglietto b3 = new Biglietto(3,7,po2,p1,s1,pag1);
-        bigliettiVenduti.add(b1);
-        bigliettiVenduti.add(b2);
-        bigliettiVenduti.add(b3);
-
-        Recensione r1 = new Recensione(5,"Bello",c1,f1);
-        Recensione r2 = new Recensione(4,"Bello",c2,f1);
-        Recensione r3 = new Recensione(1,"Brutto",c3,f1);
-        recensioni.add(r1);
-        recensioni.add(r2);
-        recensioni.add(r3);
-
-        Turno t1 = new Turno(LocalTime.now(),LocalTime.now().plusHours(8),s1,"Pulizia");
-        Turno t2 = new Turno(LocalTime.now(),LocalTime.now().plusHours(8),s2,"Vendita");
-        Turno t3 = new Turno(LocalTime.now(),LocalTime.now().plusHours(8),s3,"Pulizia");
-        turniAssegnati.add(t1);
-        turniAssegnati.add(t2);
-        turniAssegnati.add(t3);
-
-        listaClienti.getFirst().addPagamento(pag1);
-        elencoPagamenti.getFirst().addBiglietto(b1);
-        elencoPagamenti.getFirst().addBiglietto(b2);
-        listaFilm.getFirst().addProiezione(p1);
-        listaFilm.getFirst().addProiezione(p2);
-        listaFilm.getFirst().addProiezione(p3);
-        membriDelloStaff.getFirst().addTurniEffettuati(t1);
-        membriDelloStaff.getLast().addTurniEffettuati(t2);
-        membriDelloStaff.getLast().addTurniEffettuati(t3);
+    public void inizializzaListe(){
+        bigliettoDAO.recupperaBiglietti(bigliettiVenduti);
+        clienteDAO.recuperaClienti(listaClienti);
+        filmDAO.recuperaFilm(listaFilm);
+        pagamentoDAO.recuperaPagamenti(elencoPagamenti);
+        postoDAO.recuperaPosti(listaPosti);
+        proiezioneDAO.recuperaProiezioni(listaProiezioni);
+        recensioneDAO.recuperaRecensioni(recensioni);
+        salaDAO.recuperaSale(listaSale);
+        staffDAO.recuperaStaff(membriDelloStaff);
+        turnoDAO.recuperaTurni(turniAssegnati);
     }
+/*
+    public void assemblaTutteLeRelazioni() {
+ // 1. Collega FILM a PROIEZIONE
+        for (Proiezione pr : listaProiezioni) {
+            for (Film f : listaFilm) {
+                if (f.getIdFilm() == pr.getIdFilmTemporaneo()) {
+                    pr.setFilm(f);
+                    break;
+                }
+            }
+        }
+
+        // 2. Collega SALA a POSTO
+        for (Posto po : listaPosti) {
+            for (Sala s : listaSale) {
+                if (s.getNumeroSala() == po.getNumeroSalaTemporaneo()) {
+                    po.setSala(s);
+                    break;
+                }
+            }
+        }
+
+        // 3. Collega CLIENTE a PAGAMENTO
+        for (Pagamento pag : elencoPagamenti) {
+            for (Cliente c : listaClienti) {
+                if (c.getEmail().equals(pag.getEmailTemporanea())) {
+                    pag.setCliente(c);
+                    break;
+                }
+            }
+        }
+
+        // 4. Collega STAFF a TURNO
+        for (Turno t : turniAssegnati) {
+            if (t.getMatricolaTemporanea() != null) {
+                for (Staff st : membriDelloStaff) {
+                    if (st.getMatricola() == t.getMatricolaTemporanea()) {
+                        t.setStaff(st);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 5. Collega CLIENTE e FILM a RECENSIONE
+        for (Recensione rec : recensioni) {
+            for (Cliente c : listaClienti) {
+                if (c.getEmail().equals(rec.getEmailTemporanea())) {
+                    rec.setCliente(c);
+                    break;
+                }
+            }
+            for (Film f : listaFilm) {
+                if (f.getIdFilm() == rec.getIdFilmTemporaneo()) {
+                    rec.setFilm(f);
+                    break;
+                }
+            }
+        }
+        // Collega BIGLIETTO a PROIEZIONE, POSTO, PAGAMENTO e STAFF
+        for (Biglietto b : bigliettiVenduti) {
+            for (Proiezione pr : listaProiezioni) {
+                if (pr.getIdProiezione() == b.getIdProiezioneTemporaneo()) {
+                    b.setProiezioneRiferita(pr);
+                    break;
+                }
+            }
+
+            for (Posto po : listaPosti) {
+                if (po.getCodicePosto().equals(b.getCodicePostoTemporaneo())) {
+                    b.setNumeroPosto(po);
+                    break;
+                }
+            }
+
+            for (Pagamento pag : elencoPagamenti) {
+                if (pag.getIdPagamento() == b.getIdPagamentoTemporaneo()) {
+                    b.setPagamentoRiferito(pag);
+                    break;
+                }
+            }
+
+            if (b.getMatricolaTemporanea() != null) {
+                for (Staff st : membriDelloStaff) {
+                    if (st.getMatricola() == b.getMatricolaTemporanea()) {
+                        b.setStaffEsecutore(st);
+                        break;
+                    }
+                }
+            }
+        }
+
+        //Gestisce i collegamenti
+        for (Eseguita es : listaEseguite) {
+            for (Sala s : listaSale) {
+                if (s.getNumeroSala() == es.getNumeroSalaTemporaneo()) {
+                    es.setSala(s);
+                    break;
+                }
+            }
+            for (Proiezione pr : listaProiezioni) {
+                if (pr.getIdProiezione() == es.getIdProiezioneTemporaneo()) {
+                    es.setProiezione(pr);
+                    break;
+                }
+            }
+        }
+
+        for (Gestisce g : listaGestisce) {
+            for (Staff st : membriDelloStaff) {
+                if (st.getMatricola() == g.getMatricolaTemporanea()) {
+                    g.setStaff(st);
+                    break;
+                }
+            }
+            for (Sala s : listaSale) {
+                if (s.getNumeroSala() == g.getNumeroSalaTemporaneo()) {
+                    g.setSala(s);
+                    break;
+                }
+            }
+        }
+    }
+ */
 
     /**
      * Controlla i dati di accesso dei clienti e restituisce un valore booleano che permette di dare indicazioni riguardo il successo dell'operazione di accesso.

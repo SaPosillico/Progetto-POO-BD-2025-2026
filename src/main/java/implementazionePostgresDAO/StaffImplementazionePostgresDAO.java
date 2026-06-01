@@ -1,6 +1,7 @@
 package implementazionePostgresDAO;
 
 import dao.StaffDAO;
+import model.Staff;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,20 +10,22 @@ import java.util.ArrayList;
 
 public class StaffImplementazionePostgresDAO implements StaffDAO {
     private Connection connection;
+
+    public StaffImplementazionePostgresDAO(Connection connection) {
+        this.connection = connection;
+    }
+
     @Override
-    public void recuperaStaff(ArrayList<String> matricola, ArrayList<String> nome, ArrayList<String> cognome, ArrayList<Double> stipendio) {
+    public void recuperaStaff(ArrayList<Staff> membriDelloStaff) {
         String sql = "SELECT * FROM \"Staff\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-                matricola.add(st.getString("matricola"));
-                nome.add(st.getString("nome"));
-                cognome.add(st.getString("cognome"));
-                stipendio.add(st.getDouble("stipendio"));
+                Staff nuovoMembro = new Staff(st.getInt("matricola"),st.getString("nome"),st.getString("cognome"),st.getDouble("stipendio"));
+                membriDelloStaff.add(nuovoMembro);
             }
             st.close();
-            connection.close();
             return;
         } catch (SQLException e) {
             throw new RuntimeException(e);

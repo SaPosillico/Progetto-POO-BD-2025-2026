@@ -4,7 +4,7 @@ package model;
  * The type Biglietto.
  */
 public class Biglietto {
-    private int codiceBiglietto;
+    private String codiceBiglietto;
     private double prezzo;
     private Posto numeroPosto;
     private Proiezione proiezioneRiferita;
@@ -21,7 +21,7 @@ public class Biglietto {
      * @param venditoreResponsabile the venditore responsabile
      * @param acquisto              the acquisto
      */
-    public Biglietto(int codiceBiglietto, double prezzo, Posto numeroPosto, Proiezione proiezioneRiferita, Staff venditoreResponsabile, Pagamento acquisto) {
+    public Biglietto(String codiceBiglietto, double prezzo, Posto numeroPosto, Proiezione proiezioneRiferita, Staff venditoreResponsabile, Pagamento acquisto) {
         this.codiceBiglietto = codiceBiglietto;
         this.prezzo = prezzo;
         this.numeroPosto = numeroPosto;
@@ -35,7 +35,7 @@ public class Biglietto {
      *
      * @return the codice biglietto
      */
-    public int getCodiceBiglietto() {
+    public String getCodiceBiglietto() {
         return codiceBiglietto;
     }
 
@@ -44,7 +44,7 @@ public class Biglietto {
      *
      * @param codiceBiglietto the codice biglietto
      */
-    public void setCodiceBiglietto(int codiceBiglietto) {
+    public void setCodiceBiglietto(String codiceBiglietto) {
         this.codiceBiglietto = codiceBiglietto;
     }
 

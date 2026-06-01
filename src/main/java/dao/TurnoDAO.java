@@ -1,7 +1,8 @@
 package dao;
 
+import model.Turno;
 import java.util.ArrayList;
 
 public interface TurnoDAO {
-    public void recuperaTurni(ArrayList<String> ora_inizio, ArrayList<String> ora_fine, ArrayList<String> matricola, ArrayList<String> mansione);
+    public void recuperaTurni(ArrayList<Turno> listaTurni);
 }

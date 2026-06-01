@@ -1,8 +1,8 @@
 package implementazionePostgresDAO;
 
-import dao.BigliettoDAO;
+import dao.*;
 import database.ConnessioneDatabase;
-
+import model.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,13 +12,8 @@ import java.util.ArrayList;
 public class BigliettoImplementazionePostgresDAO implements BigliettoDAO {
     private Connection connection;
 
-    public BigliettoImplementazionePostgresDAO() {
-        try {
-            connection = ConnessioneDatabase.getInstance().connection;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    public BigliettoImplementazionePostgresDAO(Connection connection) {
+        this.connection = connection;
     }
 
     @Override
@@ -40,19 +35,16 @@ public class BigliettoImplementazionePostgresDAO implements BigliettoDAO {
     }
 
     @Override
-    public void recupperaBiglietti(ArrayList<String> codiceBiglietto, ArrayList<String> idProiezione, ArrayList<String> codicePosto, ArrayList<Double> prezzo) {
+    public void recupperaBiglietti(ArrayList<Biglietto> elencoBiglietti) {
         String sql = "SELECT * FROM \"Biglietto\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-                codiceBiglietto.add(st.getString("codiceBiglietto"));
-                idProiezione.add(st.getString("idProiezione"));
-                codicePosto.add(st.getString("codicePosto"));
-                prezzo.add(st.getDouble("prezzo"));
+//                Biglietto b = new Biglietto();
+//                elencoBiglietti.add(b);
             }
             st.close();
-            connection.close();
             return;
         } catch (SQLException e) {
             throw new RuntimeException(e);

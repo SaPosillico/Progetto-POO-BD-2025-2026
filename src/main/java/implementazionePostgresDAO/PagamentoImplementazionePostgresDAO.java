@@ -1,6 +1,8 @@
 package implementazionePostgresDAO;
 
 import dao.PagamentoDAO;
+import model.Pagamento;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -8,6 +10,11 @@ import java.util.ArrayList;
 
 public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
     private Connection connection;
+
+    public PagamentoImplementazionePostgresDAO(Connection connection) {
+        this.connection = connection;
+    }
+
     @Override
     public void inserisciPagamento(String metodo, double importo, LocalDate data, LocalTime ora, String email) {
         String sql = "INSERT INTO \"Pagamento\" (\"metodo\", \"importo\", \"data\", \"ora\", \"email\") VALUES (?, ?, ?, ?, ?);";
@@ -26,21 +33,20 @@ public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
     }
 
     @Override
-    public void recuperaPagamenti(ArrayList<String> metodo, ArrayList<Double> importo, ArrayList<LocalDate> data, ArrayList<LocalTime> ora) {
+    public void recuperaPagamenti(ArrayList<Pagamento> elencoPagamenti) {
         String sql = "SELECT * FROM \"Pagamento\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-                metodo.add(st.getString("metodo"));
-                LocalDate dataPagamento = st.getObject("data_proiezione", LocalDate.class);
-                LocalTime orario = st.getObject("ora_inizio", LocalTime.class);
-                data.add(dataPagamento);
-                ora.add(orario);
-                importo.add(st.getDouble("importo"));
+//                metodo.add(st.getString("metodo"));
+//                LocalDate dataPagamento = st.getObject("data_proiezione", LocalDate.class);
+//                LocalTime orario = st.getObject("ora_inizio", LocalTime.class);
+//                data.add(dataPagamento);
+//                ora.add(orario);
+//                importo.add(st.getDouble("importo"));
             }
             st.close();
-            connection.close();
             return;
         } catch (SQLException e) {
             throw new RuntimeException(e);

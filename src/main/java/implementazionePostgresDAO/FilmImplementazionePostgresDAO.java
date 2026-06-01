@@ -1,6 +1,10 @@
 package implementazionePostgresDAO;
 
 import dao.FilmDAO;
+import model.Film;
+import model.Genere;
+import model.Rating;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +13,10 @@ import java.util.ArrayList;
 
 public class FilmImplementazionePostgresDAO implements FilmDAO {
     private Connection connection;
+
+    public FilmImplementazionePostgresDAO(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public void inserisciFilm(String titolo, String regista, String rating, String genere) {
@@ -27,19 +35,16 @@ public class FilmImplementazionePostgresDAO implements FilmDAO {
     }
 
     @Override
-    public void recuperaFilm(ArrayList<String> titolo, ArrayList<String> regista, ArrayList<String> rating, ArrayList<String> genere) {
+    public void recuperaFilm(ArrayList<Film> elencoFilm) {
         String sql = "SELECT * FROM \"Film\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-                titolo.add(st.getString("titolo"));
-                regista.add(st.getString("regista"));
-                rating.add(st.getString("rating"));
-                genere.add(st.getString("genere"));
+                Film nuovoFilm = new Film(st.getString("titolo"),st.getString("regista"),Genere.valueOf(st.getString("genere")), Rating.valueOf(st.getString("rating")));
+                elencoFilm.add(nuovoFilm);
             }
             st.close();
-            connection.close();
             return;
         } catch (SQLException e) {
             throw new RuntimeException(e);

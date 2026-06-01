@@ -1,6 +1,7 @@
 package implementazionePostgresDAO;
 
 import dao.RecensioneDAO;
+import model.Recensione;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +11,11 @@ import java.util.ArrayList;
 
 public class RecensioneImplementazionePostgresDAO implements RecensioneDAO {
     private Connection connection;
+
+    public RecensioneImplementazionePostgresDAO(Connection connection) {
+        this.connection = connection;
+    }
+
     @Override
     public void inserisciRecensione(String idFilm, String email, String descrizione, int valutazione) {
         String sql = "INSERT INTO \"Recensione\" (\"valutazione\", \"descrizione\", \"email\", \"idFilm\") VALUES (?, ?, ?, ?);";
@@ -28,19 +34,18 @@ public class RecensioneImplementazionePostgresDAO implements RecensioneDAO {
     }
 
     @Override
-    public void recuperaRecensioni(ArrayList<String> idFilm, ArrayList<String> email, ArrayList<String> descrizione, ArrayList<Integer> valutazione) {
+    public void recuperaRecensioni(ArrayList<Recensione> recensioni) {
         String sql = "SELECT * FROM \"Recensione\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-                idFilm.add(st.getString("idFilm"));
-                email.add(st.getString("email"));
-                descrizione.add(st.getString("descrizione"));
-                valutazione.add(st.getInt("valutazione"));
+//                idFilm.add(st.getString("idFilm"));
+//                email.add(st.getString("email"));
+//                descrizione.add(st.getString("descrizione"));
+//                valutazione.add(st.getInt("valutazione"));
             }
             st.close();
-            connection.close();
             return;
         } catch (SQLException e) {
             throw new RuntimeException(e);
