@@ -21,6 +21,7 @@ import java.util.ArrayList;
  */
 public class Controller {
     private JFrame frameAttuale;
+
     private ArrayList<Cliente> listaClienti;
     private ArrayList<Staff> membriDelloStaff;
     private ArrayList<Film> listaFilm;
@@ -31,6 +32,7 @@ public class Controller {
     private ArrayList<Recensione> recensioni;
     private ArrayList<Turno> turniAssegnati;
     private ArrayList<Pagamento> elencoPagamenti;
+
     private BigliettoDAO bigliettoDAO;
     private ClienteDAO clienteDAO;
     private FilmDAO filmDAO;
@@ -42,6 +44,54 @@ public class Controller {
     private PostoDAO postoDAO;
     private StaffDAO staffDAO;
     private Connection connection;
+
+    //Biglietto
+    private ArrayList<String> codiceBiglietto = new ArrayList<>(),  codicePostoBiglietto = new ArrayList<>();
+    private ArrayList<Integer> idProiezioneBiglietto = new ArrayList<>(), idPagamentoBiglietto = new ArrayList<>(), matricolaBiglietto = new ArrayList<>();
+    private ArrayList<Double> prezzo = new ArrayList<>();
+
+    //Cliente
+    private ArrayList<String> email = new ArrayList<>(), nomeCliente = new ArrayList<>(), cognomeCliente = new ArrayList<>(), password = new ArrayList<>(), tipo = new ArrayList<>();
+    private ArrayList<Double> percentualeSconto = new ArrayList<>();
+
+    //Film
+    private ArrayList<Integer> idFilm = new ArrayList<>();
+    private ArrayList<String> titolo = new ArrayList<>(), regista = new ArrayList<>(), rating = new ArrayList<>(), genere = new ArrayList<>();
+
+    //Pagamento
+    private ArrayList<Integer> idPagamento = new ArrayList<>();
+    private ArrayList<String> metodo = new ArrayList<>(), emailPagamento = new ArrayList<>();
+    private ArrayList<Double> importo = new ArrayList<>();
+    private ArrayList<LocalDate> data = new ArrayList<>();
+    private ArrayList<LocalTime> ora = new ArrayList<>();
+
+    //Posto
+    private ArrayList<String> codicePosto = new ArrayList<>();
+    private ArrayList<Character> fila = new ArrayList<>();
+    private ArrayList<Integer> numero = new ArrayList<>(), numeroSalaPosto = new ArrayList<>();
+
+    //Proiezione
+    private ArrayList<Integer> idProiezione = new ArrayList<>(), idFilmProiezione = new ArrayList<>(), numeroSalaProiezione = new ArrayList<>();
+    private ArrayList<LocalDate> dataProiezione = new ArrayList<>();
+    private ArrayList<LocalTime> ora_inizio = new ArrayList<>(), ora_fine = new ArrayList<>();
+
+    //Recensione
+    private ArrayList<Integer> idRecensione = new ArrayList<>(), idFilmRecensione = new ArrayList<>(), valutazione = new ArrayList<>();
+    private ArrayList<String> emailRecensione = new ArrayList<>(), descrizione = new ArrayList<>();
+
+    //Sala
+    private ArrayList<Integer> numeroSala = new ArrayList<>(), capienza = new ArrayList<>();
+
+    //Staff
+    private ArrayList<Integer> matricola = new ArrayList<>();
+    private ArrayList<String> nome = new ArrayList<>(), cognome = new ArrayList<>();
+    private ArrayList<Double> stipendio = new ArrayList<>();
+
+    //Turno
+    private ArrayList<Integer> idTurno = new ArrayList<>(), matricolaTurno = new ArrayList<>();
+    private ArrayList<LocalTime> oraInizio = new ArrayList<>(), oraFine = new ArrayList<>();
+    private ArrayList<String> mansioni = new ArrayList<>();
+
     /**
      * Il Modello della lista è necessario per inserire i dati nella lista dei biglietti acquistati.
      */
@@ -76,7 +126,11 @@ public class Controller {
         proiezioneDAO = new ProiezioneImplementazionePostgresDAO(this.connection);
         salaDAO = new SalaImplementazionePostgresDAO(this.connection);
         turnoDAO = new TurnoImplementazionePostgresDAO(this.connection);
+        System.out.println("Inizio recupero dati dal DB...");
         inizializzaListe();
+        System.out.println("Dati primitivi recuperati con successo. Inizio mappatura oggetti...");
+        daArrayListAOggetti();
+        System.out.println("Mappatura completata! Numero film caricati: " + listaFilm.size());
     }
 
 
@@ -96,141 +150,255 @@ public class Controller {
      * Crea degli oggetti a solo scopo di test del funzionamento complessivo dell'applicativo.
      */
     public void inizializzaListe(){
-        bigliettoDAO.recupperaBiglietti(bigliettiVenduti);
-        clienteDAO.recuperaClienti(listaClienti);
-        filmDAO.recuperaFilm(listaFilm);
-        pagamentoDAO.recuperaPagamenti(elencoPagamenti);
-        postoDAO.recuperaPosti(listaPosti);
-        proiezioneDAO.recuperaProiezioni(listaProiezioni);
-        recensioneDAO.recuperaRecensioni(recensioni);
-        salaDAO.recuperaSale(listaSale);
-        staffDAO.recuperaStaff(membriDelloStaff);
-        turnoDAO.recuperaTurni(turniAssegnati);
+        bigliettoDAO.recupperaBiglietti(codiceBiglietto,idProiezioneBiglietto,codicePostoBiglietto,idPagamentoBiglietto,matricolaBiglietto,prezzo);
+        clienteDAO.recuperaClienti(email,nomeCliente,cognomeCliente,password,tipo,percentualeSconto);
+        filmDAO.recuperaFilm(idFilm,titolo,regista,rating,genere);
+        pagamentoDAO.recuperaPagamenti(idPagamento,metodo,importo,data,ora,emailPagamento);
+        postoDAO.recuperaPosti(codicePosto,fila,numero,numeroSalaPosto);
+        proiezioneDAO.recuperaProiezioni(idProiezione,dataProiezione,ora_inizio,ora_fine,idFilmProiezione,numeroSalaProiezione);
+        recensioneDAO.recuperaRecensioni(idRecensione,idFilmRecensione,emailRecensione,descrizione,valutazione);
+        salaDAO.recuperaSale(numeroSala,capienza);
+        staffDAO.recuperaStaff(matricola,nome,cognome,stipendio);
+        turnoDAO.recuperaTurni(idTurno,oraInizio,oraFine,mansioni,matricolaTurno);
     }
-/*
-    public void assemblaTutteLeRelazioni() {
- // 1. Collega FILM a PROIEZIONE
-        for (Proiezione pr : listaProiezioni) {
-            for (Film f : listaFilm) {
-                if (f.getIdFilm() == pr.getIdFilmTemporaneo()) {
-                    pr.setFilm(f);
+
+    public void daArrayListAOggetti(){
+        //Cliente
+        for(int i=0; i< email.size(); i++){
+            if(tipo.get(i).equals("Ordinario")){
+                Cliente nuovoCliente = new Cliente(email.get(i), nomeCliente.get(i), cognomeCliente.get(i), password.get(i));
+                listaClienti.add(nuovoCliente);
+            }
+            else{
+                ClienteVIP nuovoCliente = new ClienteVIP(email.get(i), nomeCliente.get(i), cognomeCliente.get(i), percentualeSconto.get(i), password.get(i));
+                listaClienti.add(nuovoCliente);
+            }
+        }
+
+        //Film
+        for(int i=0; i< idFilm.size(); i++){
+            Film nuovoFilm = new Film(idFilm.get(i), titolo.get(i), regista.get(i), Genere.valueOf(genere.get(i)), Rating.valueOf(rating.get(i)));
+            listaFilm.add(nuovoFilm);
+        }
+
+        //Sala
+        for(int i=0; i< numeroSala.size(); i++){
+            Sala nuovaSala = new Sala(numeroSala.get(i),capienza.get(i));
+            listaSale.add(nuovaSala);
+        }
+
+        //Staff
+        for(int i=0; i< matricola.size(); i++){
+            Staff nuovoMembro = new Staff(matricola.get(i), nome.get(i), cognome.get(i), stipendio.get(i));
+            membriDelloStaff.add(nuovoMembro);
+        }
+
+        //Recensione
+        for(int i=0; i< idRecensione.size(); i++){
+            Film filmRecensito = null;
+            Cliente clienteRecensore = null;
+
+            for(Cliente c: listaClienti){
+                if(c.getEmail().equals(emailRecensione.get(i))){
+                    clienteRecensore=c;
                     break;
+                }
+            }
+
+            for(Film f: listaFilm){
+                if(f.getIdFilm()==idFilmRecensione.get(i)){
+                    filmRecensito=f;
+                    break;
+                }
+            }
+            Recensione nuovaRecensione= new Recensione(idRecensione.get(i), valutazione.get(i), descrizione.get(i), clienteRecensore, filmRecensito);
+            recensioni.add(nuovaRecensione);
+        }
+
+        //Turno
+        for(int i=0; i< idTurno.size(); i++){
+            Staff membro=null;
+            for(Staff s:  membriDelloStaff){
+                if(s.getMatricola()==matricolaTurno.get(i)){
+                    membro=s;
+                    break;
+                }
+            }
+            Turno nuovoTurno = new Turno(idTurno.get(i),oraInizio.get(i),oraFine.get(i),membro,mansioni.get(i));
+            turniAssegnati.add(nuovoTurno);
+        }
+
+        //Pagamento
+        for(int i=0; i< idPagamento.size(); i++){
+            Cliente clientePagante=null;
+            for(Cliente c: listaClienti){
+                if(c.getEmail().equals(emailPagamento.get(i))){
+                    clientePagante=c;
+                    break;
+                }
+            }
+            Pagamento nuovoPagamento = new Pagamento(idPagamento.get(i),metodo.get(i),importo.get(i),data.get(i),ora.get(i),clientePagante);
+            elencoPagamenti.add(nuovoPagamento);
+        }
+
+        //Posto
+        for(int i=0; i< codicePosto.size(); i++){
+            Sala salaOspite = null;
+            for(Sala s: listaSale){
+                if(s.getNumeroSala()==numeroSalaPosto.get(i)){
+                    salaOspite=s;
+                    break;
+                }
+            }
+            Posto nuovoPosto = new Posto(codicePosto.get(i),fila.get(i),numero.get(i),salaOspite);
+            listaPosti.add(nuovoPosto);
+        }
+
+        //Proiezione
+        for(int i=0; i<idProiezione.size(); i++){
+            Sala salaOspite = null;
+            Film filmProiettato = null;
+            for(Sala s: listaSale){
+                if(s.getNumeroSala()==numeroSalaProiezione.get(i)){
+                    salaOspite=s;
+                    break;
+                }
+            }
+
+            for(Film f: listaFilm){
+                if(f.getIdFilm()==idFilmProiezione.get(i)){
+                    filmProiettato=f;
+                    break;
+                }
+            }
+            Proiezione nuovaProiezione = new Proiezione(idProiezione.get(i),dataProiezione.get(i),ora_inizio.get(i),ora_fine.get(i),salaOspite,filmProiettato);
+            listaProiezioni.add(nuovaProiezione);
+        }
+
+        //Biglietto
+        for(int i=0; i< codiceBiglietto.size(); i++){
+            Posto postoAssegnato = null;
+            Proiezione proiezioneAssegnata = null;
+            Staff responsabile = null;
+            Pagamento pagamentoEffettuato = null;
+
+            for(Proiezione p: listaProiezioni){
+                if(p.getIdProiezione()==idProiezioneBiglietto.get(i)){
+                    proiezioneAssegnata = p;
+                    break;
+                }
+            }
+            for(Posto p : listaPosti){
+                if(p.getCodicePosto().equals(codicePostoBiglietto.get(i))){
+                    postoAssegnato = p;
+                    break;
+                }
+            }
+            for(Staff s : membriDelloStaff){
+                if(s.getMatricola()==matricolaBiglietto.get(i)){
+                    responsabile = s;
+                    break;
+                }
+            }
+            for(Pagamento p : elencoPagamenti){
+                if(p.getIdPagamento()==idPagamentoBiglietto.get(i)){
+                    pagamentoEffettuato = p;
+                    break;
+                }
+            }
+            Biglietto nuovoBiglietto = new Biglietto(codiceBiglietto.get(i), prezzo.get(i), postoAssegnato,proiezioneAssegnata,responsabile,pagamentoEffettuato);
+            bigliettiVenduti.add(nuovoBiglietto);
+        }
+
+        //Cliente -> Recensione e Pagamento
+        for(Cliente c : listaClienti){
+            for(Recensione r : recensioni){
+                if(r.getCliente().equals(c)){
+                    c.addRecenzione(r);
+                }
+            }
+            for(Pagamento p : elencoPagamenti){
+                if(p.getClientePagante().equals(c)){
+                    c.addPagamento(p);
                 }
             }
         }
 
-        // 2. Collega SALA a POSTO
-        for (Posto po : listaPosti) {
-            for (Sala s : listaSale) {
-                if (s.getNumeroSala() == po.getNumeroSalaTemporaneo()) {
-                    po.setSala(s);
-                    break;
+        //Film -> Recensione e Proiezione
+        for(Film f : listaFilm){
+            for(Recensione r : recensioni){
+                if(r.getFilm().equals(f)){
+                    f.addRecensione(r);
+                }
+            }
+            for(Proiezione p : listaProiezioni){
+                if(p.getFilmProiettato().equals(f)){
+                    f.addProiezione(p);
                 }
             }
         }
 
-        // 3. Collega CLIENTE a PAGAMENTO
-        for (Pagamento pag : elencoPagamenti) {
-            for (Cliente c : listaClienti) {
-                if (c.getEmail().equals(pag.getEmailTemporanea())) {
-                    pag.setCliente(c);
-                    break;
+        //Pagamento -> Biglietto
+        for(Pagamento p : elencoPagamenti){
+            for(Biglietto b : bigliettiVenduti){
+                if(b.getAcquisto().equals(p)){
+                    p.addBiglietto(b);
                 }
             }
         }
 
-        // 4. Collega STAFF a TURNO
-        for (Turno t : turniAssegnati) {
-            if (t.getMatricolaTemporanea() != null) {
-                for (Staff st : membriDelloStaff) {
-                    if (st.getMatricola() == t.getMatricolaTemporanea()) {
-                        t.setStaff(st);
-                        break;
-                    }
+        //Posto -> Biglietto
+        for(Posto p : listaPosti){
+            for(Biglietto b : bigliettiVenduti){
+                if(b.getNumeroPosto().equals(p)){
+                    p.addBiglietto(b);
                 }
             }
         }
 
-        // 5. Collega CLIENTE e FILM a RECENSIONE
-        for (Recensione rec : recensioni) {
-            for (Cliente c : listaClienti) {
-                if (c.getEmail().equals(rec.getEmailTemporanea())) {
-                    rec.setCliente(c);
-                    break;
-                }
-            }
-            for (Film f : listaFilm) {
-                if (f.getIdFilm() == rec.getIdFilmTemporaneo()) {
-                    rec.setFilm(f);
-                    break;
-                }
-            }
-        }
-        // Collega BIGLIETTO a PROIEZIONE, POSTO, PAGAMENTO e STAFF
-        for (Biglietto b : bigliettiVenduti) {
-            for (Proiezione pr : listaProiezioni) {
-                if (pr.getIdProiezione() == b.getIdProiezioneTemporaneo()) {
-                    b.setProiezioneRiferita(pr);
-                    break;
-                }
-            }
-
-            for (Posto po : listaPosti) {
-                if (po.getCodicePosto().equals(b.getCodicePostoTemporaneo())) {
-                    b.setNumeroPosto(po);
-                    break;
-                }
-            }
-
-            for (Pagamento pag : elencoPagamenti) {
-                if (pag.getIdPagamento() == b.getIdPagamentoTemporaneo()) {
-                    b.setPagamentoRiferito(pag);
-                    break;
-                }
-            }
-
-            if (b.getMatricolaTemporanea() != null) {
-                for (Staff st : membriDelloStaff) {
-                    if (st.getMatricola() == b.getMatricolaTemporanea()) {
-                        b.setStaffEsecutore(st);
-                        break;
-                    }
+        //Proiezione -> Biglietto
+        for(Proiezione p : listaProiezioni){
+            for(Biglietto b : bigliettiVenduti){
+                if(b.getProiezioneRiferita().equals(p)){
+                    p.addBiglietto(b);
                 }
             }
         }
 
-        //Gestisce i collegamenti
-        for (Eseguita es : listaEseguite) {
-            for (Sala s : listaSale) {
-                if (s.getNumeroSala() == es.getNumeroSalaTemporaneo()) {
-                    es.setSala(s);
-                    break;
+        //Sala -> Posto, Proiezione, Staff
+        for(Sala s : listaSale){
+            for(Posto p : listaPosti){
+                if(p.getNumeroSala().equals(s)){
+                    s.addPostiPresenti(p);
                 }
             }
-            for (Proiezione pr : listaProiezioni) {
-                if (pr.getIdProiezione() == es.getIdProiezioneTemporaneo()) {
-                    es.setProiezione(pr);
-                    break;
+            for(Proiezione p : listaProiezioni){
+                if(p.getSalaProiezione().equals(s)){
+                    s.addProiezione(p);
+                }
+            }
+            for(Staff st : membriDelloStaff){
+                if(st.getSalePulite().equals(s)){
+                    s.addStaffDiSala(st);
                 }
             }
         }
 
-        for (Gestisce g : listaGestisce) {
-            for (Staff st : membriDelloStaff) {
-                if (st.getMatricola() == g.getMatricolaTemporanea()) {
-                    g.setStaff(st);
-                    break;
+        //Staff -> Turno, Sala, Biglietto
+        for(Staff s : membriDelloStaff){
+            for(Turno t : turniAssegnati){
+                if(t.getMembro().equals(s)){
+                    s.addTurniEffettuati(t);
                 }
             }
-            for (Sala s : listaSale) {
-                if (s.getNumeroSala() == g.getNumeroSalaTemporaneo()) {
-                    g.setSala(s);
-                    break;
+            for(Biglietto b : bigliettiVenduti){
+                if(b.getVenditoreResponsabile().equals(s)){
+                    s.addBiglietto(b);
                 }
             }
         }
     }
- */
+
 
     /**
      * Controlla i dati di accesso dei clienti e restituisce un valore booleano che permette di dare indicazioni riguardo il successo dell'operazione di accesso.
@@ -448,8 +616,8 @@ public class Controller {
      * @param descrizione la descrizione data
      * @param cliente     il cliente che ha lasciato la recensione
      */
-    public void aggiungiRecensione(String film, String valutazione, String descrizione, Cliente cliente) {
-        if (film == null || valutazione == null) return;
+    public boolean aggiungiRecensione(String film, String valutazione, String descrizione, Cliente cliente) {
+        if (film == null || valutazione == null) return false;
 
         Film filmTrovato = null;
         for (Film f : listaFilm) {
@@ -460,10 +628,15 @@ public class Controller {
         }
 
         if (filmTrovato != null) {
-            Recensione nuovaRecensione = new Recensione(Integer.parseInt(valutazione), descrizione, cliente, filmTrovato);
+
+            Recensione nuovaRecensione = new Recensione(0, Integer.parseInt(valutazione), descrizione, cliente, filmTrovato);
+            recensioneDAO.inserisciRecensione(filmTrovato.getIdFilm(), cliente.getEmail(), descrizione, Integer.parseInt(valutazione));
             cliente.addRecenzione(nuovaRecensione);
             filmTrovato.addRecensione(nuovaRecensione);
+            this.recensioni.add(nuovaRecensione);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -473,6 +646,7 @@ public class Controller {
      * @param membro           il membro dello staff che ha eseguito il turno
      */
     public void mostraDatiTurno(JPanel pannelloDettagli, Staff membro){
+        Turno ultimoTurno = membro.getTurniEffettuati().getLast();
         pannelloDettagli.add(new JLabel("Ora inizio:"));
         pannelloDettagli.add(new JLabel(membro.getTurniEffettuati().getLast().getOraInizioTurno().toString()));
         pannelloDettagli.add(new JLabel("Ora fine:"));
@@ -480,11 +654,16 @@ public class Controller {
         pannelloDettagli.add(new JLabel("Mansioni:"));
         pannelloDettagli.add(new JLabel(membro.getTurniEffettuati().getLast().getMansione()));
         pannelloDettagli.add(new JLabel("Tipologia:"));
-        if(membro.getTurniEffettuati().getLast().getOraInizioTurno().equals(membro.getTurniEffettuati().get(membro.getTurniEffettuati().size()-2).getOraFineTurno())){
-            pannelloDettagli.add(new Label("Straordinario, x1,5 sullo stipendio orario per questo turno."));
-        }
-        else{
-            pannelloDettagli.add(new Label("Ordinario"));
+        if (membro.getTurniEffettuati().size() >= 2) {
+            Turno penultimoTurno = membro.getTurniEffettuati().get(membro.getTurniEffettuati().size() - 2);
+
+            if (ultimoTurno.getOraInizioTurno().equals(penultimoTurno.getOraFineTurno())) {
+                pannelloDettagli.add(new JLabel("Straordinario, x1,5 sullo stipendio orario per questo turno."));
+            } else {
+                pannelloDettagli.add(new JLabel("Ordinario"));
+            }
+        } else {
+            pannelloDettagli.add(new JLabel("Ordinario"));
         }
     }
 
@@ -598,9 +777,13 @@ public class Controller {
     public boolean aggiungiProiezione(Film film, String giorno, String oraInizio, String oraFine, String sala){
         if (isDataValida(giorno) && isLocalTimeValido(oraInizio) && isLocalTimeValido(oraFine)) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate dataConvertita = LocalDate.parse(giorno, formatter);
+            LocalTime inizioConvertito = LocalTime.parse(oraInizio);
+            LocalTime fineConvertito = LocalTime.parse(oraFine);
             for(Sala s : listaSale){
-                if(s.getNumeroSala()==Integer.parseInt(sala)){
-                    Proiezione nuovaProiezione = new Proiezione(LocalDate.parse(giorno, formatter),LocalTime.parse(oraInizio),LocalTime.parse(oraFine),s,film);
+                if(s.getNumeroSala() == Integer.parseInt(sala)){
+                    Proiezione nuovaProiezione = new Proiezione(0, LocalDate.parse(giorno, formatter), LocalTime.parse(oraInizio), LocalTime.parse(oraFine), s, film);
+                    proiezioneDAO.inserisciProiezione(LocalDate.parse(giorno),LocalTime.parse(oraInizio),LocalTime.parse(oraFine), film.getIdFilm(), Integer.parseInt(sala));
                     film.addProiezione(nuovaProiezione);
                     listaProiezioni.add(nuovaProiezione);
                     return true;
@@ -610,27 +793,16 @@ public class Controller {
         return false;
     }
 
-    /**
-     * Aggiungi un nuovo film e/o una nuova proiezione in base ai dati inseriti nella pagina d'inserimento.
-     *
-     * @param titolo    il titolo
-     * @param regista   il regista
-     * @param genere    il genere
-     * @param rating    il rating
-     * @param giorno    il giorno
-     * @param oraInizio l'ora d'inizio
-     * @param oraFine   l'ora di fine
-     * @param sala      la sala
-     * @return the boolean
-     */
     public boolean aggiungiFilmOProiezione(String titolo, String regista, Genere genere, Rating rating, String giorno, String oraInizio, String oraFine, String sala){
         for(Film f : listaFilm){
             if(f.getTitolo().equals(titolo)){
-                return aggiungiProiezione(f,giorno,oraInizio,oraFine,sala);
+                return aggiungiProiezione(f, giorno, oraInizio, oraFine, sala);
             }
         }
-        Film nuovoFilm = new Film(titolo,regista,genere,rating);
+
+        Film nuovoFilm = new Film(0, titolo, regista, genere, rating);
+        filmDAO.inserisciFilm(titolo,regista,rating.toString(),genere.toString());
         listaFilm.add(nuovoFilm);
-        return aggiungiProiezione(nuovoFilm,giorno,oraInizio,oraFine,sala);
+        return aggiungiProiezione(nuovoFilm, giorno, oraInizio, oraFine, sala);
     }
 }

@@ -35,14 +35,17 @@ public class FilmImplementazionePostgresDAO implements FilmDAO {
     }
 
     @Override
-    public void recuperaFilm(ArrayList<Film> elencoFilm) {
+    public void recuperaFilm(ArrayList<Integer> idFilm, ArrayList<String> titolo, ArrayList<String> regista, ArrayList<String> rating, ArrayList<String> genere) {
         String sql = "SELECT * FROM \"Film\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-                Film nuovoFilm = new Film(st.getString("titolo"),st.getString("regista"),Genere.valueOf(st.getString("genere")), Rating.valueOf(st.getString("rating")));
-                elencoFilm.add(nuovoFilm);
+                idFilm.add(st.getInt("idFilm"));
+                titolo.add(st.getString("titolo"));
+                regista.add(st.getString("regista"));
+                rating.add(st.getString("rating"));
+                genere.add(st.getString("genere"));
             }
             st.close();
             return;

@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * The type Pagamento.
  */
 public class Pagamento {
+    private int idPagamento;
     private String metodoDiPagamento;
     private double importo;
     private LocalDate dataPagamento;
@@ -23,13 +24,23 @@ public class Pagamento {
      * @param oraPagamento      the ora pagamento
      * @param clientePagante    the cliente pagante
      */
-    public Pagamento(String metodoDiPagamento, double importo, LocalDate dataPagamento, LocalTime oraPagamento, Cliente clientePagante) {
+    public Pagamento(int idPagamento, String metodoDiPagamento, double importo, LocalDate dataPagamento, LocalTime oraPagamento, Cliente clientePagante) {
+        this.idPagamento = idPagamento;
         this.metodoDiPagamento = metodoDiPagamento;
         this.importo = importo;
         this.dataPagamento = dataPagamento;
         this.oraPagamento = oraPagamento;
         this.bigliettiComprati = new  ArrayList<>();
         this.clientePagante = clientePagante;
+    }
+
+
+    public int getIdPagamento() {
+        return idPagamento;
+    }
+
+    public void setIdPagamento(int idPagamento) {
+        this.idPagamento = idPagamento;
     }
 
     /**

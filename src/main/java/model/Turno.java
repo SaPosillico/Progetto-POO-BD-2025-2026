@@ -6,6 +6,7 @@ import java.time.LocalTime;
  * The type Turno.
  */
 public class Turno {
+    private int idTurno;
     private LocalTime oraInizioTurno;
     private LocalTime oraFineTurno;
     private Staff membro;
@@ -19,11 +20,20 @@ public class Turno {
      * @param membro         the membro
      * @param mansione       the mansione
      */
-    public Turno(LocalTime oraInizioTurno, LocalTime oraFineTurno, Staff membro, String mansione) {
+    public Turno(int idTurno, LocalTime oraInizioTurno, LocalTime oraFineTurno, Staff membro, String mansione) {
+        this.idTurno = idTurno;
         this.oraInizioTurno = oraInizioTurno;
         this.oraFineTurno = oraFineTurno;
         this.membro = membro;
         this.mansione = mansione;
+    }
+
+    public int getIdTurno() {
+        return idTurno;
+    }
+
+    public void setIdTurno(int idTurno) {
+        this.idTurno = idTurno;
     }
 
     /**

@@ -22,14 +22,15 @@ public class ProiezioneImplementazionePostgresDAO implements ProiezioneDAO {
     }
 
     @Override
-    public void inserisciProiezione(LocalDate data, LocalTime ora_inizio, LocalTime ora_fine, int idFilm) {
-        String sql = "INSERT INTO \"Proiezione\" (\"data\", \"ora_inizio\", \"ora_fine\", \"idFilm\") VALUES (?, ?, ?, ?);";
+    public void inserisciProiezione(LocalDate data, LocalTime ora_inizio, LocalTime ora_fine, int idFilm, int numeroSala) {
+        String sql = "INSERT INTO \"Proiezione\" (\"data\", \"ora_inizio\", \"ora_fine\", \"idFilm\",\"numeroSala\") VALUES (?, ?, ?, ?, ?);";
 
         try (PreparedStatement pr = connection.prepareStatement(sql)) {
             pr.setObject(1,data);
             pr.setObject(2,ora_inizio);
             pr.setObject(3,ora_fine);
             pr.setInt(4,idFilm);
+            pr.setInt(5,numeroSala);
 
             pr.executeUpdate();
         } catch (SQLException e) {
@@ -39,19 +40,21 @@ public class ProiezioneImplementazionePostgresDAO implements ProiezioneDAO {
     }
 
     @Override
-    public void recuperaProiezioni(ArrayList<Proiezione> elencoProiezioni) {
+    public void recuperaProiezioni(ArrayList<Integer> idProiezione, ArrayList<LocalDate> data, ArrayList<LocalTime> ora_inizio, ArrayList<LocalTime> ora_fine, ArrayList<Integer> idFilm, ArrayList<Integer> numeroSala) {
         String sql = "SELECT * FROM \"Proiezione\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-//                LocalDate dataProiezione = st.getObject("data", LocalDate.class);
-//                LocalTime ora1 = st.getObject("ora_inizio", LocalTime.class);
-//                LocalTime ora2 = st.getObject("ora_fine", LocalTime.class);
-//                data.add(dataProiezione);
-//                ora_inizio.add(ora1);
-//                ora_fine.add(ora2);
-//                idFilm.add(st.getInt("idFilm"));
+                idProiezione.add(st.getInt("idProiezione"));
+                LocalDate dataProiezione = st.getObject("data", LocalDate.class);
+                LocalTime ora1 = st.getObject("ora_inizio", LocalTime.class);
+                LocalTime ora2 = st.getObject("ora_fine", LocalTime.class);
+                data.add(dataProiezione);
+                ora_inizio.add(ora1);
+                ora_fine.add(ora2);
+                idFilm.add(st.getInt("idFilm"));
+                numeroSala.add(st.getInt("numeroSala"));
             }
             st.close();
             return;

@@ -16,14 +16,16 @@ public class StaffImplementazionePostgresDAO implements StaffDAO {
     }
 
     @Override
-    public void recuperaStaff(ArrayList<Staff> membriDelloStaff) {
+    public void recuperaStaff(ArrayList<Integer> matricola, ArrayList<String> nome, ArrayList<String> cognome, ArrayList<Double> stipendio) {
         String sql = "SELECT * FROM \"Staff\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-                Staff nuovoMembro = new Staff(st.getInt("matricola"),st.getString("nome"),st.getString("cognome"),st.getDouble("stipendio"));
-                membriDelloStaff.add(nuovoMembro);
+                matricola.add(st.getInt("matricola"));
+                nome.add(st.getString("nome"));
+                cognome.add(st.getString("cognome"));
+                stipendio.add(st.getDouble("stipendio"));
             }
             st.close();
             return;

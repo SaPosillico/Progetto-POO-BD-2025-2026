@@ -33,18 +33,20 @@ public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
     }
 
     @Override
-    public void recuperaPagamenti(ArrayList<Pagamento> elencoPagamenti) {
+    public void recuperaPagamenti(ArrayList<Integer> idPagamento, ArrayList<String> metodo, ArrayList<Double> importo, ArrayList<LocalDate> data, ArrayList<LocalTime> ora, ArrayList<String> email) {
         String sql = "SELECT * FROM \"Pagamento\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-//                metodo.add(st.getString("metodo"));
-//                LocalDate dataPagamento = st.getObject("data_proiezione", LocalDate.class);
-//                LocalTime orario = st.getObject("ora_inizio", LocalTime.class);
-//                data.add(dataPagamento);
-//                ora.add(orario);
-//                importo.add(st.getDouble("importo"));
+                idPagamento.add(st.getInt("idPagamento"));
+                metodo.add(st.getString("metodo"));
+                LocalDate dataPagamento = st.getObject("data", LocalDate.class);
+                LocalTime orario = st.getObject("ora", LocalTime.class);
+                data.add(dataPagamento);
+                ora.add(orario);
+                importo.add(st.getDouble("importo"));
+                email.add(st.getString("email"));
             }
             st.close();
             return;

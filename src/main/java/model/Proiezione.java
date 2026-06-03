@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * The type Proiezione.
  */
 public class Proiezione {
+    private int idProiezione;
     private LocalDate dataProiezione;
     private LocalTime oraInizioProiezione;
     private LocalTime oraFineProiezione;
@@ -23,13 +24,22 @@ public class Proiezione {
      * @param salaProiezione      the sala proiezione
      * @param filmProiettato      the film proiettato
      */
-    public Proiezione(LocalDate dataProiezione, LocalTime oraInizioProiezione, LocalTime oraFineProiezione, Sala salaProiezione, Film filmProiettato) {
+    public Proiezione(int idProiezione, LocalDate dataProiezione, LocalTime oraInizioProiezione, LocalTime oraFineProiezione, Sala salaProiezione, Film filmProiettato) {
+        this.idProiezione = idProiezione;
         this.dataProiezione = dataProiezione;
         this.oraInizioProiezione = oraInizioProiezione;
         this.oraFineProiezione = oraFineProiezione;
         this.salaProiezione = salaProiezione;
         this.filmProiettato = filmProiettato;
         this.bigliettiVenduti = new ArrayList<>();
+    }
+
+    public int getIdProiezione() {
+        return idProiezione;
+    }
+
+    public void setIdProiezione(int idProiezione) {
+        this.idProiezione = idProiezione;
     }
 
     /**

@@ -4,6 +4,7 @@ package model;
  * The type Recensione.
  */
 public class Recensione {
+    private int idRecensione;
     private int valutazione;
     private String descrizione;
     private Cliente cliente;
@@ -17,11 +18,20 @@ public class Recensione {
      * @param cliente     the cliente
      * @param film        the film
      */
-    public Recensione(int valutazione, String descrizione, Cliente cliente, Film film) {
+    public Recensione(int idRecensione, int valutazione, String descrizione, Cliente cliente, Film film) {
+        this.idRecensione = idRecensione;
         this.valutazione = valutazione;
         this.descrizione = descrizione;
         this.cliente = cliente;
         this.film = film;
+    }
+
+    public int getIdRecensione() {
+        return idRecensione;
+    }
+
+    public void setIdRecensione(int idRecensione) {
+        this.idRecensione = idRecensione;
     }
 
     /**

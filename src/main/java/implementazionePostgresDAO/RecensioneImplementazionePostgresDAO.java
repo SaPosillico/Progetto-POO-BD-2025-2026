@@ -2,6 +2,7 @@ package implementazionePostgresDAO;
 
 import dao.RecensioneDAO;
 import model.Recensione;
+import model.Sala;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,14 +18,14 @@ public class RecensioneImplementazionePostgresDAO implements RecensioneDAO {
     }
 
     @Override
-    public void inserisciRecensione(String idFilm, String email, String descrizione, int valutazione) {
+    public void inserisciRecensione(int idFilm, String email, String descrizione, int valutazione) {
         String sql = "INSERT INTO \"Recensione\" (\"valutazione\", \"descrizione\", \"email\", \"idFilm\") VALUES (?, ?, ?, ?);";
 
         try (PreparedStatement pr = connection.prepareStatement(sql)) {
             pr.setInt(1,valutazione);
             pr.setString(2,descrizione);
             pr.setString(3,email);
-            pr.setString(4,idFilm);
+            pr.setInt(4,idFilm);
 
             pr.executeUpdate();
         } catch (SQLException e) {
@@ -34,16 +35,17 @@ public class RecensioneImplementazionePostgresDAO implements RecensioneDAO {
     }
 
     @Override
-    public void recuperaRecensioni(ArrayList<Recensione> recensioni) {
+    public void recuperaRecensioni(ArrayList<Integer> idRecensione, ArrayList<Integer> idFilm, ArrayList<String> email, ArrayList<String> descrizione, ArrayList<Integer> valutazione) {
         String sql = "SELECT * FROM \"Recensione\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-//                idFilm.add(st.getString("idFilm"));
-//                email.add(st.getString("email"));
-//                descrizione.add(st.getString("descrizione"));
-//                valutazione.add(st.getInt("valutazione"));
+                idRecensione.add(st.getInt("idRecensione"));
+                idFilm.add(st.getInt("idFilm"));
+                email.add(st.getString("email"));
+                descrizione.add(st.getString("descrizione"));
+                valutazione.add(st.getInt("valutazione"));
             }
             st.close();
             return;

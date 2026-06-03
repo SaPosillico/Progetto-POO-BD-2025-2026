@@ -17,16 +17,17 @@ public class TurnoImplementazionePostgresDAO implements TurnoDAO {
     }
 
     @Override
-    public void recuperaTurni(ArrayList<Turno> turni) {
+    public void recuperaTurni(ArrayList<Integer> idTurno, ArrayList<LocalTime> oraInizio, ArrayList<LocalTime> oraFine, ArrayList<String> mansioni, ArrayList<Integer> matricola) {
         String sql = "SELECT * FROM \"Turno\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-//                ora_inizio.add((LocalTime) st.getObject("ora_inizio"));
-//                ora_fine.add((LocalTime) st.getObject("ora_fine"));
-//                matricola.add(st.getString("matricola"));
-//                mansione.add(st.getString("mansioni"));
+                idTurno.add(st.getInt("idTurno"));
+                oraInizio.add(st.getObject("ora_inizio", LocalTime.class));
+                oraFine.add(st.getObject("ora_fine", LocalTime.class));
+                matricola.add(st.getInt("matricola"));
+                mansioni.add(st.getString("mansioni"));
             }
             st.close();
             return;

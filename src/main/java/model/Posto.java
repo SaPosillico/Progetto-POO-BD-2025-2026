@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * The type Posto.
  */
 public class Posto {
-    private int codicePosto;
+    private String codicePosto;
     private char fila;
     private int numeroPosto;
     private Sala numeroSala;
@@ -20,7 +20,7 @@ public class Posto {
      * @param numeroPosto the numero posto
      * @param numeroSala  the numero sala
      */
-    public Posto(int codicePosto, char fila, int numeroPosto, Sala numeroSala) {
+    public Posto(String codicePosto, char fila, int numeroPosto, Sala numeroSala) {
         this.codicePosto = codicePosto;
         this.fila = fila;
         this.numeroPosto = numeroPosto;
@@ -33,7 +33,7 @@ public class Posto {
      *
      * @return the codice posto
      */
-    public int getCodicePosto() {
+    public String getCodicePosto() {
         return codicePosto;
     }
 
@@ -42,7 +42,7 @@ public class Posto {
      *
      * @param codicePosto the codice posto
      */
-    public void setCodicePosto(int codicePosto) {
+    public void setCodicePosto(String codicePosto) {
         this.codicePosto = codicePosto;
     }
 

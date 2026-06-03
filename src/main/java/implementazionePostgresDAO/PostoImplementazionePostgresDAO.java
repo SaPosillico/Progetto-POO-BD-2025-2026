@@ -16,16 +16,18 @@ public class PostoImplementazionePostgresDAO implements PostoDAO {
     }
 
     @Override
-    public void recuperaPosti(ArrayList<Posto> posti) {
+    public void recuperaPosti(ArrayList<String> codicePosto, ArrayList<Character> fila, ArrayList<Integer> numero, ArrayList<Integer> numeroSala) {
         String sql = "SELECT * FROM \"Posto\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-//                fila.add(st.getString("fila"));
-//                numero.add(st.getInt("numero"));
-//                codicePosto.add(st.getString("codicePosto"));
-//                sala.add(st.getInt("sala"));
+                String filaStr = st.getString("fila");
+                char carattereFila = (filaStr != null && !filaStr.isEmpty()) ? filaStr.charAt(0) : ' ';
+                fila.add(carattereFila);
+                numero.add(st.getInt("numero"));
+                codicePosto.add(st.getString("codicePosto"));
+                numeroSala.add(st.getInt("numeroSala"));
             }
             st.close();
             return;

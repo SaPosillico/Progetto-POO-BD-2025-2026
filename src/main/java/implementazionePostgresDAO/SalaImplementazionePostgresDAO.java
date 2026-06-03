@@ -16,14 +16,14 @@ public class SalaImplementazionePostgresDAO implements SalaDAO {
     }
 
     @Override
-    public void recuperaSale(ArrayList<Sala> sale) {
+    public void recuperaSale(ArrayList<Integer> numeroSala, ArrayList<Integer> capienza) {
         String sql = "SELECT * FROM \"Sala\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-                Sala nuovaSala = new Sala(st.getInt("numeroSala"),st.getInt("capienza"));
-                sale.add(nuovaSala);
+                numeroSala.add(st.getInt("numeroSala"));
+                capienza.add(st.getInt("capienza"));
             }
             st.close();
             return;

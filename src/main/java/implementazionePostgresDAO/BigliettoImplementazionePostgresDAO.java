@@ -35,14 +35,18 @@ public class BigliettoImplementazionePostgresDAO implements BigliettoDAO {
     }
 
     @Override
-    public void recupperaBiglietti(ArrayList<Biglietto> elencoBiglietti) {
+    public void recupperaBiglietti(ArrayList<String> codiceBiglietto, ArrayList<Integer> idProiezione, ArrayList<String> codicePosto, ArrayList<Integer> idPagamento, ArrayList<Integer> matricola, ArrayList<Double> prezzo) {
         String sql = "SELECT * FROM \"Biglietto\"";
         ResultSet st;
         try{
             st = connection.prepareStatement(sql).executeQuery();
             while(st.next()){
-//                Biglietto b = new Biglietto();
-//                elencoBiglietti.add(b);
+                codiceBiglietto.add(st.getString("codiceBiglietto"));
+                prezzo.add(st.getDouble("prezzo"));
+                matricola.add(st.getInt("matricola"));
+                idPagamento.add(st.getInt("idPagamento"));
+                codicePosto.add(st.getString("codicePosto"));
+                idProiezione.add(st.getInt("idProiezione"));
             }
             st.close();
             return;

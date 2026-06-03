@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * The type Film.
  */
 public class Film {
+    private int idFilm;
     private String titolo;
     private String regista;
     private Genere genere;
@@ -21,13 +22,22 @@ public class Film {
      * @param genere  the genere
      * @param rating  the rating
      */
-    public Film(String titolo, String regista, Genere genere, Rating rating) {
+    public Film(int idFilm,String titolo, String regista, Genere genere, Rating rating) {
+        this.idFilm = idFilm;
         this.titolo = titolo;
         this.regista = regista;
         this.genere = genere;
         this.rating = rating;
         this.recensioni = new ArrayList<>();
         this.proiezioni = new ArrayList<>();
+    }
+
+    public int getIdFilm() {
+        return idFilm;
+    }
+
+    public void setIdFilm(int idFilm) {
+        this.idFilm = idFilm;
     }
 
     /**
