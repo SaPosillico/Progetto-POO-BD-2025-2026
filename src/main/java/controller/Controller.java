@@ -92,6 +92,9 @@ public class Controller {
     private ArrayList<LocalTime> oraInizio = new ArrayList<>(), oraFine = new ArrayList<>();
     private ArrayList<String> mansioni = new ArrayList<>();
 
+    //Staff - Sala
+    private ArrayList<Integer> Matricola_Sala = new ArrayList<>(), Sala_matricola = new ArrayList<>();
+
     /**
      * Il Modello della lista è necessario per inserire i dati nella lista dei biglietti acquistati.
      */
@@ -126,11 +129,8 @@ public class Controller {
         proiezioneDAO = new ProiezioneImplementazionePostgresDAO(this.connection);
         salaDAO = new SalaImplementazionePostgresDAO(this.connection);
         turnoDAO = new TurnoImplementazionePostgresDAO(this.connection);
-        System.out.println("Inizio recupero dati dal DB...");
         inizializzaListe();
-        System.out.println("Dati primitivi recuperati con successo. Inizio mappatura oggetti...");
         daArrayListAOggetti();
-        System.out.println("Mappatura completata! Numero film caricati: " + listaFilm.size());
     }
 
 
@@ -160,6 +160,7 @@ public class Controller {
         salaDAO.recuperaSale(numeroSala,capienza);
         staffDAO.recuperaStaff(matricola,nome,cognome,stipendio);
         turnoDAO.recuperaTurni(idTurno,oraInizio,oraFine,mansioni,matricolaTurno);
+        salaDAO.recuperaDatiStaffSAle(Matricola_Sala,Sala_matricola);
     }
 
     public void daArrayListAOggetti(){
@@ -384,7 +385,7 @@ public class Controller {
             }
         }
 
-        //Staff -> Turno, Sala, Biglietto
+        //Staff -> Turno, Biglietto
         for(Staff s : membriDelloStaff){
             for(Turno t : turniAssegnati){
                 if(t.getMembro().equals(s)){
@@ -394,6 +395,22 @@ public class Controller {
             for(Biglietto b : bigliettiVenduti){
                 if(b.getVenditoreResponsabile().equals(s)){
                     s.addBiglietto(b);
+                }
+            }
+        }
+
+        //Staff -> Sala e Sala -> Staff
+        for(int i=0; i< Matricola_Sala.size(); i++){
+            for(Staff s: membriDelloStaff){
+                if(s.getMatricola()==Matricola_Sala.get(i)){
+                    for(Sala sa : listaSale){
+                        if(sa.getNumeroSala()==Sala_matricola.get(i)){
+                            s.addSala(sa);
+                            sa.addStaffDiSala(s);
+                            break;
+                        }
+                    }
+                    break;
                 }
             }
         }
@@ -410,6 +427,7 @@ public class Controller {
      * @param frameHome  the frame home
      * @return the boolean
      */
+
     public boolean checkClientLogInDetails(String email, String password, Controller controller, JFrame frameHome){
         for (Cliente c : listaClienti){
             if(c.getEmail().equals(email)){
@@ -550,6 +568,7 @@ public class Controller {
      * @param filmSelector la JComboBox per scegliere il film
      */
     public void creaListaFilm(JComboBox filmSelector){
+        filmSelector.addItem(" ");
         for(Film f : listaFilm){
             filmSelector.addItem(f.getTitolo());
         }
@@ -561,16 +580,28 @@ public class Controller {
      * @param projectionSelector la JComboBox per scegliere la proiezione
      * @param film               il film selezionato
      */
-    public void creaListaProiezioni(JComboBox projectionSelector, String film){
-        projectionSelector.removeAll();
-        for(Film f : listaFilm){
-            if(f.getTitolo().equals(film)){
-                for(Proiezione p : f.getProiezioni()){
-                    projectionSelector.addItem("Sala "+p.getSalaProiezione().getNumeroSala()+", data "+p.getDataProiezione()+", orario "+p.getOraInizioProiezione()+" - "+p.getOraFineProiezione());
+
+    public void creaListaProiezioni(JComboBox<String> projectionSelector, String film){
+        DefaultComboBoxModel<String> nuovoModello = new DefaultComboBoxModel<>();
+
+        if (film != null && !film.trim().isEmpty()) {
+            for (Proiezione p : listaProiezioni) {
+                if (p.getFilmProiettato() != null && p.getFilmProiettato().getTitolo().equals(film)) {
+                    String elementoDellaLista = "Sala " + p.getSalaProiezione().getNumeroSala() +
+                            ", data " + p.getDataProiezione() +
+                            ", orario " + p.getOraInizioProiezione() +
+                            " - " + p.getOraFineProiezione();
+
+                    nuovoModello.addElement(elementoDellaLista);
                 }
-                return;
             }
         }
+
+        if (nuovoModello.getSize() == 0) {
+            nuovoModello.addElement("Nessuna proiezione disponibile.");
+        }
+
+        projectionSelector.setModel(nuovoModello);
     }
 
     /**
@@ -594,6 +625,113 @@ public class Controller {
                 return false;
             }
         }
+    }
+
+    public boolean checkCardDetails(String numeroCarta, String CVVCarta, String scadenzaCarta){
+        if (numeroCarta == null || CVVCarta == null || scadenzaCarta == null) return false;
+        numeroCarta = numeroCarta.replace(" ", "").replace("-", "");
+
+        if (!CVVCarta.matches("\\d{3,4}")) {
+            return false;
+        }
+
+        try {
+            String[] partiData = scadenzaCarta.split("/");
+            if (partiData.length != 2) return false;
+
+            int mese = Integer.parseInt(partiData[0].trim());
+            int anno = Integer.parseInt(partiData[1].trim());
+
+            if (anno < 100) anno += 2000;
+
+            if (mese < 1 || mese > 12) return false;
+
+            LocalDate oggi = LocalDate.now();
+            LocalDate ultimoGiornoMeseScadenza = LocalDate.of(anno, mese, 1).plusMonths(1).minusDays(1);
+
+            if (ultimoGiornoMeseScadenza.isBefore(oggi)) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        int sommaCifre = 0;
+        boolean raddoppia = false;
+        for(int i=numeroCarta.length()-1; i>=0; i--){
+            char c = numeroCarta.charAt(i);
+            int cifra = Character.getNumericValue(c);
+
+            if (raddoppia) {
+                cifra *= 2;
+                if (cifra > 9) {
+                    cifra -= 9;
+                }
+            }
+
+            sommaCifre += cifra;
+            raddoppia = !raddoppia;
+        }
+
+        return sommaCifre % 10 == 0;
+    }
+
+    public void salvaDatiPagamento(String metodo, double importo, Cliente cliente, int numeroBiglietti, String datiProiezione){
+        pagamentoDAO.inserisciPagamento(metodo,importo,LocalDate.now(),LocalTime.now(), cliente.getEmail());
+        Pagamento nuovoPagamento = new Pagamento(elencoPagamenti.size()+1,metodo,importo,LocalDate.now(),LocalTime.now(),cliente);
+        elencoPagamenti.add(nuovoPagamento);
+        inserisciNuovoBiglietto(nuovoPagamento,datiProiezione,numeroBiglietti,importo);
+    }
+
+    public void inserisciNuovoBiglietto(Pagamento nuovoPagamento, String datiProiezione, int numeroBiglietti, double importo){
+        Posto postoLiberoTrovato = null;
+        Proiezione proiezioneSelezionata = null;
+
+        for(Proiezione p : listaProiezioni){
+            if(("Sala " + p.getSalaProiezione().getNumeroSala() + ", data " + p.getDataProiezione() + ", orario " + p.getOraInizioProiezione() + " - " + p.getOraFineProiezione()).equals(datiProiezione)){
+                proiezioneSelezionata = p;
+                break;
+            }
+        }
+
+        for (Posto posto : listaPosti) {
+            if (posto.getNumeroSala().getNumeroSala() == proiezioneSelezionata.getSalaProiezione().getNumeroSala()) {
+                boolean giaOccupato = false;
+
+                for (Biglietto b : bigliettiVenduti) {
+                    if (b.getProiezioneRiferita().getIdProiezione() == proiezioneSelezionata.getIdProiezione() &&
+                            b.getNumeroPosto().getCodicePosto().equals(posto.getCodicePosto())) {
+                        giaOccupato = true;
+                        break;
+                    }
+                }
+
+                if (!giaOccupato) {
+                    postoLiberoTrovato = posto;
+                    break;
+                }
+            }
+        }
+
+        if (postoLiberoTrovato == null) {
+            JOptionPane.showMessageDialog(null, "Sold Out: Non ci sono più posti disponibili per questa proiezione.");
+            return;
+        }
+
+        String codiceBiglietto = String.valueOf(postoLiberoTrovato.getCodicePosto().charAt(0)+postoLiberoTrovato.getCodicePosto().charAt(1)+nuovoPagamento.getIdPagamento()+proiezioneSelezionata.getIdProiezione());
+        // 4. Salvataggio nel Database tramite il DAO
+        bigliettoDAO.inserisciNuovoBiglietto(codiceBiglietto, proiezioneSelezionata.getIdProiezione(), postoLiberoTrovato.getCodicePosto(), nuovoPagamento.getIdPagamento(), null, (importo/numeroBiglietti));
+
+        // 5. Se il DB conferma, aggiorniamo la memoria di Java
+        Biglietto nuovoBiglietto = new Biglietto(codiceBiglietto, (importo/numeroBiglietti), postoLiberoTrovato, proiezioneSelezionata, null, nuovoPagamento);
+            // Aggiorniamo le liste dei dati
+        bigliettiVenduti.add(nuovoBiglietto);
+        postoLiberoTrovato.addBiglietto(nuovoBiglietto);
+        proiezioneSelezionata.addBiglietto(nuovoBiglietto);
+        nuovoPagamento.addBiglietto(nuovoBiglietto);
+
+            JOptionPane.showMessageDialog(null,"Biglietti acquistati correttamente.");
+
     }
 
     /**

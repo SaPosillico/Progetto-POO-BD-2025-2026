@@ -155,5 +155,9 @@ public class Cliente {
     public void addPagamento(Pagamento p) {
         this.elencoPagamenti.add(p);
     }
+
+    public String getTipo(){
+        return "ordinario";
+    }
 }
 

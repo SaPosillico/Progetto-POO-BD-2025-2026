@@ -72,11 +72,12 @@ public class AcquistaGUI {
             public void actionPerformed(ActionEvent e) {
                 Object filmSelezionato = filmSelector.getSelectedItem();
 
-                if (filmSelezionato != null && !filmSelezionato.toString().isEmpty()) {
+                if (filmSelezionato != null && !filmSelezionato.toString().trim().isEmpty()) {
                     controller.creaListaProiezioni(projectionSelector, filmSelezionato.toString());
                 } else {
-                    projectionSelector.removeAll();
-                    projectionSelector.addItem("");
+                    DefaultComboBoxModel<String> modelloVuoto = new DefaultComboBoxModel<>();
+                    modelloVuoto.addElement("");
+                    projectionSelector.setModel(modelloVuoto);
                 }
             }
         });
@@ -85,8 +86,7 @@ public class AcquistaGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(controller.checkPurchaseDetails(filmSelector.getSelectedItem().toString(),projectionSelector.getSelectedItem().toString(),campoNumeroBiglietti.getText())){
-                    JOptionPane.showMessageDialog(null,"Biglietti acquistati, per il pagamento recarsi fisicamente alla cassa con almeno un'ora di anticipo rispetto l'inizio della proiezione.");
-                    controller.changeFrame(frameLocalHome);
+                    SchedaPagamento schedaPagamento = new SchedaPagamento(frameLocalHome,controller,cliente,Integer.parseInt(campoNumeroBiglietti.getText()),projectionSelector.getSelectedItem().toString());
                 }
                 else{
                     JOptionPane.showMessageDialog(null,"Errore durante la procedura di acquisto, ritentare.");

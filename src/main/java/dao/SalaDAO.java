@@ -5,4 +5,5 @@ import java.util.ArrayList;
 
 public interface SalaDAO {
     public void recuperaSale(ArrayList<Integer> numeroSala, ArrayList<Integer> capienza);
+    public void recuperaDatiStaffSAle(ArrayList<Integer> numeroMatricola, ArrayList<Integer> numeroSala);
 }

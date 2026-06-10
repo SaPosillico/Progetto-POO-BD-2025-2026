@@ -17,16 +17,16 @@ public class BigliettoImplementazionePostgresDAO implements BigliettoDAO {
     }
 
     @Override
-    public void inserisciNuovoBiglietto(String codiceBiglietto, String idProiezione, String codicePosto, String idPagamento, String matricola, double prezzo) {
+    public void inserisciNuovoBiglietto(String codiceBiglietto, int idProiezione, String codicePosto, int idPagamento, String matricola, double prezzo) {
         String sql = "INSERT INTO \"Biglietto\" (\"codiceBiglietto\", \"prezzo\", \"matricola\", \"idPagamento\", \"codicePosto\", \"idProiezione\") VALUES (?, ?, ?, ?, ?, ?);";
 
         try (PreparedStatement pr = connection.prepareStatement(sql)) {
             pr.setString(1,codiceBiglietto);
             pr.setDouble(2,prezzo);
             pr.setString(3,matricola);
-            pr.setString(4,idPagamento);
+            pr.setInt(4,idPagamento);
             pr.setString(5,codicePosto);
-            pr.setString(6,idProiezione);
+            pr.setInt(6,idProiezione);
             pr.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Errore nella query di inserimento: " + e.getMessage());

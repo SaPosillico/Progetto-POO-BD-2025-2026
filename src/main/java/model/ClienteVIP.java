@@ -37,4 +37,9 @@ public class ClienteVIP extends Cliente{
     public void setPercentualeSconto(double percentualeSconto) {
         this.percentualeSconto = percentualeSconto;
     }
+
+    @Override
+    public String getTipo() {
+        return "VIP";
+    }
 }

@@ -31,4 +31,22 @@ public class SalaImplementazionePostgresDAO implements SalaDAO {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void recuperaDatiStaffSAle(ArrayList<Integer> numeroMatricola, ArrayList<Integer> numeroSala) {
+        String sql = "SELECT * FROM \"Gestisce\"";
+        ResultSet st;
+
+        try{
+            st = connection.prepareStatement(sql).executeQuery();
+            while(st.next()){
+                numeroSala.add(st.getInt("numeroSala"));
+                numeroMatricola.add(st.getInt("matricola"));
+            }
+            st.close();
+            return;
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
 }
