@@ -140,6 +140,6 @@ public class Biglietto {
 
     @Override
     public String toString() {
-        return "Codice: "+codiceBiglietto +", Prezzo: "+ prezzo +", Posto: "+ numeroPosto.getNumeroPosto();
+        return "Codice: "+codiceBiglietto +", Prezzo: "+ prezzo +", Posto: "+ numeroPosto.getCodicePosto();
     }
 }

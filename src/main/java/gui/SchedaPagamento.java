@@ -23,12 +23,11 @@ public class SchedaPagamento {
     public SchedaPagamento(JFrame frameLocalHome, Controller controller, Cliente cliente, int numeroBiglietti, String datiProiezione) {
         JFrame frame = new JFrame("SchedaPagamento");
         frame.setContentPane(mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
 
         if(((ClienteVIP) cliente).getPercentualeSconto()!=0){
-            labelImporto.setText(""+numeroBiglietti*((ClienteVIP)cliente).getPercentualeSconto()*7);
+            labelImporto.setText(""+(numeroBiglietti*7-numeroBiglietti*((ClienteVIP)cliente).getPercentualeSconto()*7));
         }
         else{
             labelImporto.setText(""+numeroBiglietti*7);
@@ -64,14 +63,27 @@ public class SchedaPagamento {
             public void actionPerformed(ActionEvent e) {
                 if(cartaRadioButton.isSelected()){
                     if(controller.checkCardDetails(numeroCarta.getText(),CVVCarta.getText(),scadenzaCarta.getText())){
-                        controller.salvaDatiPagamento("Carta",Double.parseDouble(labelImporto.getText()),cliente,numeroBiglietti,datiProiezione);
+                        if(controller.salvaDatiPagamento("Carta",Double.parseDouble(labelImporto.getText()),cliente,numeroBiglietti,datiProiezione)){
+                            JOptionPane.showMessageDialog(null,"Biglietti acquistati correttamente.");
+                            controller.changeFrame(frameLocalHome);
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null,"Errore nell'acquisto dei biglietti.");
+                        }
                     }
                     else{
                         JOptionPane.showMessageDialog(null,"Dati inseriti errati.");
                     }
                 }
                 else{
-                    controller.salvaDatiPagamento("Contanti",Double.parseDouble(labelImporto.getText()),cliente,numeroBiglietti,datiProiezione);
+                    if(controller.salvaDatiPagamento("Contanti",Double.parseDouble(labelImporto.getText()),cliente,numeroBiglietti,datiProiezione)){
+                        JOptionPane.showMessageDialog(null,"I biglietti sono stati prenotati, per l'acquisto effettivo, recarsi alla cassa al massimo 30 minuti prima dell'inizio della proiezione.");
+                        controller.changeFrame(frameLocalHome);
+                        frame.dispose();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null,"Errore nell'acquisto dei biglietti.");
+                    }
                 }
             }
         });

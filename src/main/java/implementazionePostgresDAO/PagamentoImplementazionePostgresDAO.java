@@ -54,4 +54,19 @@ public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public int getNewestId() {
+        String sql = "SELECT * FROM \"Pagamento\" ORDER BY \"idPagamento\" ASC LIMIT 1;";
+
+       try{
+           ResultSet st = connection.prepareStatement(sql).executeQuery();
+           if(st.next())
+               return  st.getInt("idPagamento");
+           return -1;
+       }
+       catch (SQLException e){
+           throw new RuntimeException(e);
+       }
+    }
 }

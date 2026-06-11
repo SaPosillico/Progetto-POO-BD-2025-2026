@@ -44,6 +44,7 @@ public class Controller {
     private PostoDAO postoDAO;
     private StaffDAO staffDAO;
     private Connection connection;
+    public static final Staff VENDITA_ONLINE = new Staff(0, "Sistema", "Automatico",0);
 
     //Biglietto
     private ArrayList<String> codiceBiglietto = new ArrayList<>(),  codicePostoBiglietto = new ArrayList<>();
@@ -379,8 +380,10 @@ public class Controller {
                 }
             }
             for(Staff st : membriDelloStaff){
-                if(st.getSalePulite().equals(s)){
-                    s.addStaffDiSala(st);
+                for(Sala sala : st.getSalePulite()){
+                    if(sala.equals(s)){
+                        s.addStaffDiSala(st);
+                    }
                 }
             }
         }
@@ -393,6 +396,10 @@ public class Controller {
                 }
             }
             for(Biglietto b : bigliettiVenduti){
+                if(b == null || b.getVenditoreResponsabile() == null){
+                    continue;
+                }
+
                 if(b.getVenditoreResponsabile().equals(s)){
                     s.addBiglietto(b);
                 }
@@ -676,62 +683,75 @@ public class Controller {
         return sommaCifre % 10 == 0;
     }
 
-    public void salvaDatiPagamento(String metodo, double importo, Cliente cliente, int numeroBiglietti, String datiProiezione){
-        pagamentoDAO.inserisciPagamento(metodo,importo,LocalDate.now(),LocalTime.now(), cliente.getEmail());
-        Pagamento nuovoPagamento = new Pagamento(elencoPagamenti.size()+1,metodo,importo,LocalDate.now(),LocalTime.now(),cliente);
-        elencoPagamenti.add(nuovoPagamento);
-        inserisciNuovoBiglietto(nuovoPagamento,datiProiezione,numeroBiglietti,importo);
-    }
+    public boolean salvaDatiPagamento(String metodo, double importo, Cliente cliente, int numeroBiglietti, String datiProiezione){
+        try{
+            Proiezione proiezioneSelezionata = null;
 
-    public void inserisciNuovoBiglietto(Pagamento nuovoPagamento, String datiProiezione, int numeroBiglietti, double importo){
-        Posto postoLiberoTrovato = null;
-        Proiezione proiezioneSelezionata = null;
-
-        for(Proiezione p : listaProiezioni){
-            if(("Sala " + p.getSalaProiezione().getNumeroSala() + ", data " + p.getDataProiezione() + ", orario " + p.getOraInizioProiezione() + " - " + p.getOraFineProiezione()).equals(datiProiezione)){
-                proiezioneSelezionata = p;
-                break;
-            }
-        }
-
-        for (Posto posto : listaPosti) {
-            if (posto.getNumeroSala().getNumeroSala() == proiezioneSelezionata.getSalaProiezione().getNumeroSala()) {
-                boolean giaOccupato = false;
-
-                for (Biglietto b : bigliettiVenduti) {
-                    if (b.getProiezioneRiferita().getIdProiezione() == proiezioneSelezionata.getIdProiezione() &&
-                            b.getNumeroPosto().getCodicePosto().equals(posto.getCodicePosto())) {
-                        giaOccupato = true;
-                        break;
-                    }
-                }
-
-                if (!giaOccupato) {
-                    postoLiberoTrovato = posto;
+            for(Proiezione p : listaProiezioni){
+                if(("Sala " + p.getSalaProiezione().getNumeroSala() + ", data " + p.getDataProiezione() + ", orario " + p.getOraInizioProiezione() + " - " + p.getOraFineProiezione()).equals(datiProiezione)){
+                    proiezioneSelezionata = p;
                     break;
                 }
             }
+
+            ArrayList<Posto> postoLiberoTrovato = new ArrayList<>();
+            for(int i=0; i<numeroBiglietti; i++){
+                for (Posto posto : listaPosti) {
+                    if (posto.getNumeroSala().getNumeroSala() == proiezioneSelezionata.getSalaProiezione().getNumeroSala()) {
+                        if(postoLiberoTrovato.contains(posto))
+                            continue;
+
+                        boolean giaOccupato = false;
+                        for (Biglietto b : bigliettiVenduti) {
+                            if (b.getProiezioneRiferita().getIdProiezione() == proiezioneSelezionata.getIdProiezione() &&
+                                    b.getNumeroPosto().getCodicePosto().equals(posto.getCodicePosto())) {
+                                giaOccupato = true;
+                                break;
+                            }
+                        }
+
+                        if (!giaOccupato) {
+                            postoLiberoTrovato.add(posto);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (postoLiberoTrovato.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Sold Out: Non ci sono più posti disponibili per questa proiezione.");
+                return false;
+            }
+            else if(postoLiberoTrovato.size()<numeroBiglietti) {
+                JOptionPane.showMessageDialog(null, "I posti disponibili per questa proiezione "+postoLiberoTrovato.size()+", sono inferiori a quelli richiesti "+numeroBiglietti+".");
+                return false;
+            }
+
+            pagamentoDAO.inserisciPagamento(metodo,importo,LocalDate.now(),LocalTime.now(), cliente.getEmail());
+            int idPagamentoEffettuato = pagamentoDAO.getNewestId();
+            if(idPagamentoEffettuato==-1)
+                return false;
+            Pagamento nuovoPagamento = new Pagamento(idPagamentoEffettuato,metodo,importo,LocalDate.now(),LocalTime.now(),cliente);
+            elencoPagamenti.add(nuovoPagamento);
+
+            for(Posto p : postoLiberoTrovato){
+                inserisciNuovoBiglietto(nuovoPagamento,proiezioneSelezionata,p,(importo/numeroBiglietti));
+            }
+            return true;
         }
-
-        if (postoLiberoTrovato == null) {
-            JOptionPane.showMessageDialog(null, "Sold Out: Non ci sono più posti disponibili per questa proiezione.");
-            return;
+        catch (Exception e){
+            return false;
         }
+    }
 
-        String codiceBiglietto = String.valueOf(postoLiberoTrovato.getCodicePosto().charAt(0)+postoLiberoTrovato.getCodicePosto().charAt(1)+nuovoPagamento.getIdPagamento()+proiezioneSelezionata.getIdProiezione());
-        // 4. Salvataggio nel Database tramite il DAO
-        bigliettoDAO.inserisciNuovoBiglietto(codiceBiglietto, proiezioneSelezionata.getIdProiezione(), postoLiberoTrovato.getCodicePosto(), nuovoPagamento.getIdPagamento(), null, (importo/numeroBiglietti));
+    public void inserisciNuovoBiglietto(Pagamento nuovoPagamento, Proiezione proiezioneSelezionata, Posto posto, double importo){
+        String codiceBiglietto = "B"+posto.getCodicePosto()+nuovoPagamento.getIdPagamento()+proiezioneSelezionata.getIdProiezione();
+        bigliettoDAO.inserisciNuovoBiglietto(codiceBiglietto, proiezioneSelezionata.getIdProiezione(), posto.getCodicePosto(), nuovoPagamento.getIdPagamento(), null, importo);
 
-        // 5. Se il DB conferma, aggiorniamo la memoria di Java
-        Biglietto nuovoBiglietto = new Biglietto(codiceBiglietto, (importo/numeroBiglietti), postoLiberoTrovato, proiezioneSelezionata, null, nuovoPagamento);
-            // Aggiorniamo le liste dei dati
+        Biglietto nuovoBiglietto = new Biglietto(codiceBiglietto, importo, posto, proiezioneSelezionata, null, nuovoPagamento);
         bigliettiVenduti.add(nuovoBiglietto);
-        postoLiberoTrovato.addBiglietto(nuovoBiglietto);
+        posto.addBiglietto(nuovoBiglietto);
         proiezioneSelezionata.addBiglietto(nuovoBiglietto);
         nuovoPagamento.addBiglietto(nuovoBiglietto);
-
-            JOptionPane.showMessageDialog(null,"Biglietti acquistati correttamente.");
-
     }
 
     /**

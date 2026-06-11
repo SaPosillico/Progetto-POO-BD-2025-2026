@@ -1,7 +1,7 @@
 package implementazionePostgresDAO;
 
 import dao.*;
-import database.ConnessioneDatabase;
+import controller.*;
 import model.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,13 +17,17 @@ public class BigliettoImplementazionePostgresDAO implements BigliettoDAO {
     }
 
     @Override
-    public void inserisciNuovoBiglietto(String codiceBiglietto, int idProiezione, String codicePosto, int idPagamento, String matricola, double prezzo) {
+    public void inserisciNuovoBiglietto(String codiceBiglietto, int idProiezione, String codicePosto, int idPagamento, Integer matricola, double prezzo) {
         String sql = "INSERT INTO \"Biglietto\" (\"codiceBiglietto\", \"prezzo\", \"matricola\", \"idPagamento\", \"codicePosto\", \"idProiezione\") VALUES (?, ?, ?, ?, ?, ?);";
 
         try (PreparedStatement pr = connection.prepareStatement(sql)) {
             pr.setString(1,codiceBiglietto);
             pr.setDouble(2,prezzo);
-            pr.setString(3,matricola);
+            if (matricola==null) {
+                pr.setNull(3, java.sql.Types.INTEGER);
+            } else {
+                pr.setInt(3, matricola);
+            }
             pr.setInt(4,idPagamento);
             pr.setString(5,codicePosto);
             pr.setInt(6,idProiezione);
@@ -43,7 +47,12 @@ public class BigliettoImplementazionePostgresDAO implements BigliettoDAO {
             while(st.next()){
                 codiceBiglietto.add(st.getString("codiceBiglietto"));
                 prezzo.add(st.getDouble("prezzo"));
-                matricola.add(st.getInt("matricola"));
+                int mat = st.getInt("matricola");
+                if (st.wasNull()) {
+                    matricola.add(Controller.VENDITA_ONLINE.getMatricola());
+                } else {
+                    matricola.add(mat);
+                }
                 idPagamento.add(st.getInt("idPagamento"));
                 codicePosto.add(st.getString("codicePosto"));
                 idProiezione.add(st.getInt("idProiezione"));
