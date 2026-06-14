@@ -57,7 +57,7 @@ public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
 
     @Override
     public int getNewestId() {
-        String sql = "SELECT * FROM \"Pagamento\" ORDER BY \"idPagamento\" ASC LIMIT 1;";
+        String sql = "SELECT * FROM \"Pagamento\" ORDER BY \"idPagamento\" DESC LIMIT 1;";
 
        try{
            ResultSet st = connection.prepareStatement(sql).executeQuery();

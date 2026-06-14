@@ -625,8 +625,8 @@ public class Controller {
         }
         else{
             try{
-                Integer.parseInt(numeroBiglietti);
-                return true;
+                int numero = Integer.parseInt(numeroBiglietti);
+                return numero>0;
             }
             catch (NumberFormatException e){
                 return false;

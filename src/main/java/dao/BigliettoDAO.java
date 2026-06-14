@@ -1,7 +1,5 @@
 package dao;
 
-
-import model.Biglietto;
 import java.util.ArrayList;
 
 public interface BigliettoDAO {

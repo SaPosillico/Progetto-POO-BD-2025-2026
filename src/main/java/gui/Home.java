@@ -88,21 +88,18 @@ public class Home {
         filmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //PaginaFilmGUI paginaFilm = new PaginaFilmGUI(frameHome,controller);
                 controller.changeFrame(new PaginaFilmGUI(frameHome,controller).getFrame());
             }
         });
         proiezioniButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //PaginaProiezioniGUI paginaProiezioni = new PaginaProiezioniGUI(frameHome,controller);
                 controller.changeFrame(new PaginaProiezioniGUI(frameHome,controller).getFrame());
             }
         });
         logInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //PaginaLogInGUI paginaLogIn = new PaginaLogInGUI(frameHome,controller);
                 controller.changeFrame(new PaginaLogInGUI(frameHome,controller).getFrame());
             }
         });
