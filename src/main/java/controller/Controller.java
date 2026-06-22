@@ -934,10 +934,10 @@ public class Controller {
      */
     public boolean aggiungiProiezione(Film film, String giorno, String oraInizio, String oraFine, String sala){
         if (isDataValida(giorno) && isLocalTimeValido(oraInizio) && isLocalTimeValido(oraFine)) {
+            if(!LocalTime.parse(oraFine).isAfter(LocalTime.parse(oraInizio))){
+                return false;
+            }
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate dataConvertita = LocalDate.parse(giorno, formatter);
-            LocalTime inizioConvertito = LocalTime.parse(oraInizio);
-            LocalTime fineConvertito = LocalTime.parse(oraFine);
             for(Sala s : listaSale){
                 if(s.getNumeroSala() == Integer.parseInt(sala)){
                     Proiezione nuovaProiezione = new Proiezione(0, LocalDate.parse(giorno, formatter), LocalTime.parse(oraInizio), LocalTime.parse(oraFine), s, film);

@@ -78,8 +78,8 @@ public class SchedaPagamento {
                 else{
                     if(controller.salvaDatiPagamento("Contanti",Double.parseDouble(labelImporto.getText()),cliente,numeroBiglietti,datiProiezione)){
                         JOptionPane.showMessageDialog(null,"I biglietti sono stati prenotati, per l'acquisto effettivo, recarsi alla cassa al massimo 30 minuti prima dell'inizio della proiezione.");
-                        controller.changeFrame(frameLocalHome);
                         frame.dispose();
+                        controller.changeFrame(frameLocalHome);
                     }
                     else{
                         JOptionPane.showMessageDialog(null,"Errore nell'acquisto dei biglietti.");
