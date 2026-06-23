@@ -85,7 +85,7 @@ public class AcquistaGUI {
         acquistaButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(controller.checkPurchaseDetails(filmSelector.getSelectedItem().toString(),projectionSelector.getSelectedItem().toString(),campoNumeroBiglietti.getText())){
+                if(controller.checkPurchaseDetails(filmSelector.getSelectedItem().toString(),projectionSelector.getSelectedItem().toString(),campoNumeroBiglietti.getText(),cliente)){
                     SchedaPagamento schedaPagamento = new SchedaPagamento(frameLocalHome,controller,cliente,Integer.parseInt(campoNumeroBiglietti.getText()),projectionSelector.getSelectedItem().toString());
                 }
                 else{

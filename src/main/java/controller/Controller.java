@@ -516,7 +516,8 @@ public class Controller {
             temp.add(labelGenere);
             temp.add(genere);
 
-            temp.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+            temp.setBorder(BorderFactory.createMatteBorder(0, 0, 10, 0, Color.LIGHT_GRAY));
+            temp.setLayout(new GridLayout(4,2));
             pannelloDati.add(temp);
         }
         pannelloDati.revalidate();
@@ -541,14 +542,16 @@ public class Controller {
         model.addRow(colonne);
 
         for (Proiezione p : listaProiezioni) {
-            Object[] riga = {
-                    p.getFilmProiettato().getTitolo(),
-                    p.getSalaProiezione().getNumeroSala(),
-                    p.getDataProiezione(),
-                    p.getOraInizioProiezione(),
-                    p.getOraFineProiezione()
-            };
-            model.addRow(riga);
+            if(p.getDataProiezione().isAfter(LocalDate.now()) || (p.getDataProiezione().isEqual(LocalDate.now()) && p.getOraInizioProiezione().isBefore(LocalTime.now()))){
+                Object[] riga = {
+                        p.getFilmProiettato().getTitolo(),
+                        p.getSalaProiezione().getNumeroSala(),
+                        p.getDataProiezione(),
+                        p.getOraInizioProiezione(),
+                        p.getOraFineProiezione()
+                };
+                model.addRow(riga);
+            }
         }
         tabella.setModel(model);
     }
@@ -594,12 +597,14 @@ public class Controller {
         if (film != null && !film.trim().isEmpty()) {
             for (Proiezione p : listaProiezioni) {
                 if (p.getFilmProiettato() != null && p.getFilmProiettato().getTitolo().equals(film)) {
-                    String elementoDellaLista = "Sala " + p.getSalaProiezione().getNumeroSala() +
-                            ", data " + p.getDataProiezione() +
-                            ", orario " + p.getOraInizioProiezione() +
-                            " - " + p.getOraFineProiezione();
+                    if(p.getDataProiezione().isAfter(LocalDate.now()) || (p.getDataProiezione().isEqual(LocalDate.now()) && p.getOraInizioProiezione().isBefore(LocalTime.now()))){
+                        String elementoDellaLista = "Sala " + p.getSalaProiezione().getNumeroSala() +
+                                ", data " + p.getDataProiezione() +
+                                ", orario " + p.getOraInizioProiezione() +
+                                " - " + p.getOraFineProiezione();
 
-                    nuovoModello.addElement(elementoDellaLista);
+                        nuovoModello.addElement(elementoDellaLista);
+                    }
                 }
             }
         }
@@ -611,6 +616,15 @@ public class Controller {
         projectionSelector.setModel(nuovoModello);
     }
 
+    public boolean controllaValiditaBiglietto(String biglietto){
+        for(Biglietto b : bigliettiVenduti){
+            if(biglietto.equals("Codice: "+b.getCodiceBiglietto())){
+                return (LocalDate.now().isBefore(b.getProiezioneRiferita().getDataProiezione()) || LocalDate.now().equals(b.getProiezioneRiferita().getDataProiezione()));
+            }
+        }
+        return false;
+    }
+
     /**
      * Controlla i dati inseriti e conferma o no l'acquisto dei biglietti.
      *
@@ -619,18 +633,53 @@ public class Controller {
      * @param numeroBiglietti il numero biglietti acquistati
      * @return the boolean
      */
-    public boolean checkPurchaseDetails(String film, String proiezione, String numeroBiglietti){
-        if(numeroBiglietti==null || numeroBiglietti.isEmpty() || film.isEmpty() || proiezione.isEmpty()){
+    public boolean checkPurchaseDetails(String film, String proiezione, String numeroBiglietti, Cliente cliente) {
+        if (numeroBiglietti == null || numeroBiglietti.isEmpty() ||
+                film == null || film.isEmpty() ||
+                proiezione == null || proiezione.isEmpty() ||
+                cliente == null) {
             return false;
         }
-        else{
-            try{
-                int numero = Integer.parseInt(numeroBiglietti);
-                return numero>0;
-            }
-            catch (NumberFormatException e){
+
+        try {
+            int numero = Integer.parseInt(numeroBiglietti);
+            if (numero <= 0) {
                 return false;
             }
+
+            Proiezione proiezioneSelezionata = null;
+            for (Proiezione pr : listaProiezioni) {
+                String stringaConfronto = "Sala " + pr.getSalaProiezione().getNumeroSala() +
+                        ", data " + pr.getDataProiezione() +
+                        ", orario " + pr.getOraInizioProiezione() +
+                        " - " + pr.getOraFineProiezione();
+                if (stringaConfronto.equals(proiezione)) {
+                    proiezioneSelezionata = pr;
+                    break;
+                }
+            }
+
+            if (proiezioneSelezionata == null) {
+                return false;
+            }
+
+            int bigliettiAcquistati = 0;
+
+            if (cliente.getElencoPagamenti() != null) {
+                for (Pagamento p : cliente.getElencoPagamenti()) {
+                    if (p.getBigliettiComprati() != null) {
+                        for (Biglietto b : p.getBigliettiComprati()) {
+                            if (proiezioneSelezionata.equals(b.getProiezioneRiferita())) {
+                                bigliettiAcquistati++;
+                            }
+                        }
+                    }
+                }
+            }
+            return (bigliettiAcquistati + numero) <= 10;
+
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 
@@ -731,6 +780,7 @@ public class Controller {
             if(idPagamentoEffettuato==-1)
                 return false;
             Pagamento nuovoPagamento = new Pagamento(idPagamentoEffettuato,metodo,importo,LocalDate.now(),LocalTime.now(),cliente);
+            cliente.addPagamento(nuovoPagamento);
             elencoPagamenti.add(nuovoPagamento);
 
             for(Posto p : postoLiberoTrovato){

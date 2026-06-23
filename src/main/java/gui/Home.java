@@ -61,7 +61,7 @@ public class Home {
     I NOSTRI SERVIZI ESCLUSIVI:
     ------------------------------------------------------------
        Tecnologia Laser 4K & Dolby Atmos: 
-       Tutte le nostre 5 sale sono dotate di proiettori di ultima generazione 
+       Tutte le nostre 10 sale sono dotate di proiettori di ultima generazione 
        e sistemi audio immersivi per farti sentire al centro dell'azione.
        
        Comfort Premium: 
@@ -77,11 +77,6 @@ public class Home {
        Dove siamo: Via del Cinema 42, Città della Luce.
        Orari di apertura: Lunedì - Domenica dalle 15:30 alle 23:30 
        (Nei giorni festivi l'apertura è anticipata alle 10:00).
-    
-    PROMOZIONI DELLA SETTIMANA:
-    ------------------------------------------------------------
-       Mercoledì Universitario: Biglietto ridotto a soli 5,00€ per tutti gli studenti.
-       Family Pack: 2 Adulti + 2 Bambini a soli 22,00€ (Popcorn incluso!).
     """);
         areaDescrizione.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
