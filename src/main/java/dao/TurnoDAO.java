@@ -1,7 +1,5 @@
 package dao;
 
-import model.Turno;
-
 import java.time.LocalTime;
 import java.util.ArrayList;
 

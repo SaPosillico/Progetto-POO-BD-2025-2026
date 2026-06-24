@@ -1,8 +1,6 @@
 package implementazionePostgresDAO;
 
 import dao.PagamentoDAO;
-import model.Pagamento;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,8 +25,7 @@ public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
             pr.setString(5,email);
             pr.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Errore nella query di inserimento: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -57,7 +54,7 @@ public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
 
     @Override
     public int getNewestId() {
-        String sql = "SELECT * FROM \"Pagamento\" ORDER BY \"idPagamento\" DESC LIMIT 1;";
+        String sql = "SELECT MAX(\"idPagamento\") FROM \"Pagamento\";";
 
        try{
            ResultSet st = connection.prepareStatement(sql).executeQuery();

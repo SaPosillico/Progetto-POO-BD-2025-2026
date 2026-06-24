@@ -140,28 +140,35 @@ public class Controller {
             this.connection = ConnessioneDatabase.getInstance().connection;
 
             if (this.connection == null || this.connection.isClosed()) {
-                System.out.println("[Controller] Errore durante la connessione.");
+                JOptionPane.showMessageDialog(null,"Impossibile accedere al database.");
+                System.exit(0);
             }
         } catch (SQLException e) {
-            System.err.println("[Controller] Errore critico: Impossibile connettersi al database!");
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Impossibile accedere al database.");
+            System.exit(0);
         }
     }
     /**
      * Crea degli oggetti a solo scopo di test del funzionamento complessivo dell'applicativo.
      */
     public void inizializzaListe(){
-        bigliettoDAO.recupperaBiglietti(codiceBiglietto,idProiezioneBiglietto,codicePostoBiglietto,idPagamentoBiglietto,matricolaBiglietto,prezzo);
-        clienteDAO.recuperaClienti(email,nomeCliente,cognomeCliente,password,tipo,percentualeSconto);
-        filmDAO.recuperaFilm(idFilm,titolo,regista,rating,genere);
-        pagamentoDAO.recuperaPagamenti(idPagamento,metodo,importo,data,ora,emailPagamento);
-        postoDAO.recuperaPosti(codicePosto,fila,numero,numeroSalaPosto);
-        proiezioneDAO.recuperaProiezioni(idProiezione,dataProiezione,ora_inizio,ora_fine,idFilmProiezione,numeroSalaProiezione);
-        recensioneDAO.recuperaRecensioni(idRecensione,idFilmRecensione,emailRecensione,descrizione,valutazione);
-        salaDAO.recuperaSale(numeroSala,capienza);
-        staffDAO.recuperaStaff(matricola,nome,cognome,stipendio);
-        turnoDAO.recuperaTurni(idTurno,oraInizio,oraFine,mansioni,matricolaTurno);
-        salaDAO.recuperaDatiStaffSAle(Matricola_Sala,Sala_matricola);
+        try{
+            bigliettoDAO.recupperaBiglietti(codiceBiglietto,idProiezioneBiglietto,codicePostoBiglietto,idPagamentoBiglietto,matricolaBiglietto,prezzo);
+            clienteDAO.recuperaClienti(email,nomeCliente,cognomeCliente,password,tipo,percentualeSconto);
+            filmDAO.recuperaFilm(idFilm,titolo,regista,rating,genere);
+            pagamentoDAO.recuperaPagamenti(idPagamento,metodo,importo,data,ora,emailPagamento);
+            postoDAO.recuperaPosti(codicePosto,fila,numero,numeroSalaPosto);
+            proiezioneDAO.recuperaProiezioni(idProiezione,dataProiezione,ora_inizio,ora_fine,idFilmProiezione,numeroSalaProiezione);
+            recensioneDAO.recuperaRecensioni(idRecensione,idFilmRecensione,emailRecensione,descrizione,valutazione);
+            salaDAO.recuperaSale(numeroSala,capienza);
+            staffDAO.recuperaStaff(matricola,nome,cognome,stipendio);
+            turnoDAO.recuperaTurni(idTurno,oraInizio,oraFine,mansioni,matricolaTurno);
+            salaDAO.recuperaDatiStaffSAle(Matricola_Sala,Sala_matricola);
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Errore nell'accesso ai dati.");
+            System.exit(0);
+        }
     }
 
     public void daArrayListAOggetti(){
@@ -794,14 +801,19 @@ public class Controller {
     }
 
     public void inserisciNuovoBiglietto(Pagamento nuovoPagamento, Proiezione proiezioneSelezionata, Posto posto, double importo){
-        String codiceBiglietto = "B"+posto.getCodicePosto()+nuovoPagamento.getIdPagamento()+proiezioneSelezionata.getIdProiezione();
-        bigliettoDAO.inserisciNuovoBiglietto(codiceBiglietto, proiezioneSelezionata.getIdProiezione(), posto.getCodicePosto(), nuovoPagamento.getIdPagamento(), null, importo);
+        try{
+            String codiceBiglietto = "B"+posto.getCodicePosto()+nuovoPagamento.getIdPagamento()+proiezioneSelezionata.getIdProiezione();
+            bigliettoDAO.inserisciNuovoBiglietto(codiceBiglietto, proiezioneSelezionata.getIdProiezione(), posto.getCodicePosto(), nuovoPagamento.getIdPagamento(), null, importo);
 
-        Biglietto nuovoBiglietto = new Biglietto(codiceBiglietto, importo, posto, proiezioneSelezionata, null, nuovoPagamento);
-        bigliettiVenduti.add(nuovoBiglietto);
-        posto.addBiglietto(nuovoBiglietto);
-        proiezioneSelezionata.addBiglietto(nuovoBiglietto);
-        nuovoPagamento.addBiglietto(nuovoBiglietto);
+            Biglietto nuovoBiglietto = new Biglietto(codiceBiglietto, importo, posto, proiezioneSelezionata, null, nuovoPagamento);
+            bigliettiVenduti.add(nuovoBiglietto);
+            posto.addBiglietto(nuovoBiglietto);
+            proiezioneSelezionata.addBiglietto(nuovoBiglietto);
+            nuovoPagamento.addBiglietto(nuovoBiglietto);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Errore fatale. Impossibile generare nuovi biglietti.");
+            System.exit(0);
+        }
     }
 
     /**
@@ -836,13 +848,17 @@ public class Controller {
         }
 
         if (filmTrovato != null) {
-
-            Recensione nuovaRecensione = new Recensione(0, Integer.parseInt(valutazione), descrizione, cliente, filmTrovato);
-            recensioneDAO.inserisciRecensione(filmTrovato.getIdFilm(), cliente.getEmail(), descrizione, Integer.parseInt(valutazione));
-            cliente.addRecenzione(nuovaRecensione);
-            filmTrovato.addRecensione(nuovaRecensione);
-            this.recensioni.add(nuovaRecensione);
-            return true;
+            try{
+                Recensione nuovaRecensione = new Recensione(0, Integer.parseInt(valutazione), descrizione, cliente, filmTrovato);
+                recensioneDAO.inserisciRecensione(filmTrovato.getIdFilm(), cliente.getEmail(), descrizione, Integer.parseInt(valutazione));
+                cliente.addRecenzione(nuovaRecensione);
+                filmTrovato.addRecensione(nuovaRecensione);
+                recensioni.add(nuovaRecensione);
+                return true;
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,"Errore. Impossibile inserire la recensione.");
+                return false;
+            }
         }
         return false;
     }
@@ -990,11 +1006,16 @@ public class Controller {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             for(Sala s : listaSale){
                 if(s.getNumeroSala() == Integer.parseInt(sala)){
-                    Proiezione nuovaProiezione = new Proiezione(0, LocalDate.parse(giorno, formatter), LocalTime.parse(oraInizio), LocalTime.parse(oraFine), s, film);
-                    proiezioneDAO.inserisciProiezione(LocalDate.parse(giorno),LocalTime.parse(oraInizio),LocalTime.parse(oraFine), film.getIdFilm(), Integer.parseInt(sala));
-                    film.addProiezione(nuovaProiezione);
-                    listaProiezioni.add(nuovaProiezione);
-                    return true;
+                    try{
+                        Proiezione nuovaProiezione = new Proiezione(0, LocalDate.parse(giorno, formatter), LocalTime.parse(oraInizio), LocalTime.parse(oraFine), s, film);
+                        proiezioneDAO.inserisciProiezione(LocalDate.parse(giorno),LocalTime.parse(oraInizio),LocalTime.parse(oraFine), film.getIdFilm(), Integer.parseInt(sala));
+                        film.addProiezione(nuovaProiezione);
+                        listaProiezioni.add(nuovaProiezione);
+                        return true;
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null,"Errore. Impossibile inserire nuove proiezioni.");
+                        return false;
+                    }
                 }
             }
         }
@@ -1008,9 +1029,14 @@ public class Controller {
             }
         }
 
-        Film nuovoFilm = new Film(0, titolo, regista, genere, rating);
-        filmDAO.inserisciFilm(titolo,regista,rating.toString(),genere.toString());
-        listaFilm.add(nuovoFilm);
-        return aggiungiProiezione(nuovoFilm, giorno, oraInizio, oraFine, sala);
+        try{
+            Film nuovoFilm = new Film(0, titolo, regista, genere, rating);
+            filmDAO.inserisciFilm(titolo,regista,rating.toString(),genere.toString());
+            listaFilm.add(nuovoFilm);
+            return aggiungiProiezione(nuovoFilm, giorno, oraInizio, oraFine, sala);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Errore. Impossibile inserire nuovo film.");
+            return false;
+        }
     }
 }

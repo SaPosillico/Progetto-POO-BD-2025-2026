@@ -1,8 +1,6 @@
 package implementazionePostgresDAO;
 
 import dao.StaffDAO;
-import model.Staff;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

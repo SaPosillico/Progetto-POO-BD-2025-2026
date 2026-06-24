@@ -1,6 +1,5 @@
 package dao;
 
-import model.Film;
 import java.util.ArrayList;
 
 public interface FilmDAO {

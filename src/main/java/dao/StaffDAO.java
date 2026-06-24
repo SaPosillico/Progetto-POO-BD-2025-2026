@@ -1,6 +1,5 @@
 package dao;
 
-import model.Staff;
 import java.util.ArrayList;
 
 public interface StaffDAO {

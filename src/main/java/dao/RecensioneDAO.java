@@ -1,8 +1,5 @@
 package dao;
 
-import model.Recensione;
-import model.Sala;
-
 import java.util.ArrayList;
 
 public interface RecensioneDAO {

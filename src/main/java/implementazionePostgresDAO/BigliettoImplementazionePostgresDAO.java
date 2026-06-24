@@ -33,8 +33,7 @@ public class BigliettoImplementazionePostgresDAO implements BigliettoDAO {
             pr.setInt(6,idProiezione);
             pr.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Errore nella query di inserimento: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

@@ -1,9 +1,6 @@
 package implementazionePostgresDAO;
 
 import dao.RecensioneDAO;
-import model.Recensione;
-import model.Sala;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,8 +26,7 @@ public class RecensioneImplementazionePostgresDAO implements RecensioneDAO {
 
             pr.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Errore nella query di inserimento: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

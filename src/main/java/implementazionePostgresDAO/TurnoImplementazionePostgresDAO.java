@@ -1,8 +1,6 @@
 package implementazionePostgresDAO;
 
 import dao.TurnoDAO;
-import model.Turno;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

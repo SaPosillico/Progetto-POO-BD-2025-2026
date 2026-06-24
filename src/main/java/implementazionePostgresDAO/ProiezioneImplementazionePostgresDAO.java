@@ -1,11 +1,6 @@
 package implementazionePostgresDAO;
 
 import dao.ProiezioneDAO;
-import dao.SalaDAO;
-import model.Film;
-import model.Proiezione;
-import model.Sala;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +17,7 @@ public class ProiezioneImplementazionePostgresDAO implements ProiezioneDAO {
     }
 
     @Override
-    public void inserisciProiezione(LocalDate data, LocalTime ora_inizio, LocalTime ora_fine, int idFilm, int numeroSala) {
+    public void inserisciProiezione(LocalDate data, LocalTime ora_inizio, LocalTime ora_fine, int idFilm, int numeroSala){
         String sql = "INSERT INTO \"Proiezione\" (\"data\", \"ora_inizio\", \"ora_fine\", \"idFilm\",\"numeroSala\") VALUES (?, ?, ?, ?, ?);";
 
         try (PreparedStatement pr = connection.prepareStatement(sql)) {
@@ -34,8 +29,7 @@ public class ProiezioneImplementazionePostgresDAO implements ProiezioneDAO {
 
             pr.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Errore nella query di inserimento: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

@@ -1,8 +1,6 @@
 package implementazionePostgresDAO;
 
 import dao.SalaDAO;
-import model.Sala;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,10 +1,6 @@
 package implementazionePostgresDAO;
 
 import dao.FilmDAO;
-import model.Film;
-import model.Genere;
-import model.Rating;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,8 +25,7 @@ public class FilmImplementazionePostgresDAO implements FilmDAO {
             pr.setString(4,rating);
             pr.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Errore nella query di inserimento: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
