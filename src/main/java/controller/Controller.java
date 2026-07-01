@@ -694,11 +694,12 @@ public class Controller {
         if (numeroCarta == null || CVVCarta == null || scadenzaCarta == null) return false;
         numeroCarta = numeroCarta.replace(" ", "").replace("-", "");
 
-        if (!CVVCarta.matches("\\d{3,4}")) {
+        if (CVVCarta.length()!=3) {
             return false;
         }
 
         try {
+            Integer.parseInt(CVVCarta);
             String[] partiData = scadenzaCarta.split("/");
             if (partiData.length != 2) return false;
 
