@@ -1,6 +1,5 @@
 package gui;
 
-import gui.AcquistaGUI;
 import controller.*;
 import javax.swing.*;
 import java.awt.*;
@@ -16,13 +15,13 @@ public class PannelloLogInCliente extends JPanel {
     private JButton pulsanteAccesso;
 
     /**
-     * Instantiates a new Pannello log in cliente.
+     * Definisce il pannello di accesso tramite credenziali dei clienti.
      *
      * @param frameHome  the frame home
      * @param controller the controller
      */
     public PannelloLogInCliente(JFrame frameHome, Controller controller) {
-        setLayout(new GridLayout(3, 2, 10, 10)); // Un layout semplice a griglia
+        setLayout(new GridLayout(3, 2, 10, 10));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         add(new JLabel("Email Cliente:"));
@@ -34,7 +33,7 @@ public class PannelloLogInCliente extends JPanel {
         add(campoPassword);
 
         pulsanteAccesso = new JButton("Accedi come Cliente");
-        add(new JLabel()); // Spazio vuoto per allineamento
+        add(new JLabel());
         add(pulsanteAccesso);
 
         pulsanteAccesso.addActionListener(new ActionListener() {

@@ -14,12 +14,12 @@ public class Biglietto {
     /**
      * Instantiates a new Biglietto.
      *
-     * @param codiceBiglietto       the codice biglietto
-     * @param prezzo                the prezzo
-     * @param numeroPosto           the numero posto
-     * @param proiezioneRiferita    the proiezione riferita
-     * @param venditoreResponsabile the venditore responsabile
-     * @param acquisto              the acquisto
+     * @param codiceBiglietto       il codice del biglietto
+     * @param prezzo                il prezzo
+     * @param numeroPosto           il codice del posto
+     * @param proiezioneRiferita    la proiezione riferita
+     * @param venditoreResponsabile il venditore responsabile
+     * @param acquisto              i dati d'acquisto
      */
     public Biglietto(String codiceBiglietto, double prezzo, Posto numeroPosto, Proiezione proiezioneRiferita, Staff venditoreResponsabile, Pagamento acquisto) {
         this.codiceBiglietto = codiceBiglietto;

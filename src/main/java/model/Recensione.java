@@ -13,10 +13,11 @@ public class Recensione {
     /**
      * Instantiates a new Recensione.
      *
-     * @param valutazione the valutazione
-     * @param descrizione the descrizione
-     * @param cliente     the cliente
-     * @param film        the film
+     * @param idRecensione l'id della recensione
+     * @param valutazione  la valutazione
+     * @param descrizione  la descrizione
+     * @param cliente      il cliente
+     * @param film         il film
      */
     public Recensione(int idRecensione, int valutazione, String descrizione, Cliente cliente, Film film) {
         this.idRecensione = idRecensione;
@@ -26,10 +27,20 @@ public class Recensione {
         this.film = film;
     }
 
+    /**
+     * Gets id recensione.
+     *
+     * @return the id recensione
+     */
     public int getIdRecensione() {
         return idRecensione;
     }
 
+    /**
+     * Sets id recensione.
+     *
+     * @param idRecensione the id recensione
+     */
     public void setIdRecensione(int idRecensione) {
         this.idRecensione = idRecensione;
     }

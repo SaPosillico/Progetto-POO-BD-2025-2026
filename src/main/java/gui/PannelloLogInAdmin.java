@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import controller.*;
 
 /**
@@ -16,10 +15,10 @@ public class PannelloLogInAdmin extends JPanel {
     private JButton pulsanteAccessoAdmin;
 
     /**
-     * Instantiates a new Pannello log in admin.
+     * Definisce il pannello di accesso tramite credenziali per lo staff.
      *
-     * @param frameHome  the frame home
-     * @param controller the controller
+     * @param frameHome  il frame home
+     * @param controller l'oggetto controller
      */
     public PannelloLogInAdmin(JFrame frameHome, Controller controller) {
         setLayout(new GridLayout(3, 2, 10, 10));

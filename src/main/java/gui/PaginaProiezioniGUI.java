@@ -19,9 +19,9 @@ public class PaginaProiezioniGUI {
     private JFrame frameProiezioni;
 
     /**
-     * Gets frame.
+     * Restituisce il frame.
      *
-     * @return the frame
+     * @return il frame
      */
     public JFrame getFrame() {
         return this.frameProiezioni;

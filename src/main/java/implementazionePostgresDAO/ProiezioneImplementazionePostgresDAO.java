@@ -9,9 +9,17 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * The type Proiezione implementazione postgres dao.
+ */
 public class ProiezioneImplementazionePostgresDAO implements ProiezioneDAO {
     private Connection connection;
 
+    /**
+     * Instantiates a new Proiezione implementazione postgres dao.
+     *
+     * @param connection the connection
+     */
     public ProiezioneImplementazionePostgresDAO(Connection connection) {
         this.connection = connection;
     }
@@ -53,6 +61,21 @@ public class ProiezioneImplementazionePostgresDAO implements ProiezioneDAO {
             st.close();
             return;
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int getNewestId() {
+        String sql = "SELECT MAX(\"idProiezione\") FROM \"Proiezione\";";
+
+        try{
+            ResultSet st = connection.prepareStatement(sql).executeQuery();
+            if(st.next())
+                return  st.getInt("idProiezione");
+            return -1;
+        }
+        catch (SQLException e){
             throw new RuntimeException(e);
         }
     }

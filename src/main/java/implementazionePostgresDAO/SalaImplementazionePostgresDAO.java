@@ -6,9 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * The type Sala implementazione postgres dao.
+ */
 public class SalaImplementazionePostgresDAO implements SalaDAO {
     private Connection connection;
 
+    /**
+     * Instantiates a new Sala implementazione postgres dao.
+     *
+     * @param connection the connection
+     */
     public SalaImplementazionePostgresDAO(Connection connection) {
         this.connection = connection;
     }

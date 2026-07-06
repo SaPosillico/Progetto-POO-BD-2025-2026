@@ -6,9 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * The type Staff implementazione postgres dao.
+ */
 public class StaffImplementazionePostgresDAO implements StaffDAO {
     private Connection connection;
 
+    /**
+     * Instantiates a new Staff implementazione postgres dao.
+     *
+     * @param connection the connection
+     */
     public StaffImplementazionePostgresDAO(Connection connection) {
         this.connection = connection;
     }

@@ -34,9 +34,9 @@ public class Home {
     }
 
     /**
-     * Gets frame.
+     * Restituisce il frame.
      *
-     * @return the frame
+     * @return il frame
      */
     public JFrame getFrame() {
         return this.frameHome;

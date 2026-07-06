@@ -7,9 +7,17 @@ import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * The type Turno implementazione postgres dao.
+ */
 public class TurnoImplementazionePostgresDAO implements TurnoDAO {
     private Connection connection;
 
+    /**
+     * Instantiates a new Turno implementazione postgres dao.
+     *
+     * @param connection the connection
+     */
     public TurnoImplementazionePostgresDAO(Connection connection) {
         this.connection = connection;
     }

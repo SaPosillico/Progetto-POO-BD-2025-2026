@@ -44,6 +44,9 @@ public class Controller {
     private PostoDAO postoDAO;
     private StaffDAO staffDAO;
     private Connection connection;
+    /**
+     * Oggetto statico VENDITA_ONLINE per inserire una matricola nel caso di acquisto online.
+     */
     public static final Staff VENDITA_ONLINE = new Staff(0, "Sistema", "Automatico",0);
 
     //Biglietto
@@ -102,7 +105,7 @@ public class Controller {
     public static DefaultListModel<Biglietto> modelloLista;
 
     /**
-     * Instantiates a new Controller.
+     * Inizializzazione ArrayList e oggetti per le interazioni col database.
      *
      * @param frameHome il frame home
      */
@@ -134,7 +137,9 @@ public class Controller {
         daArrayListAOggetti();
     }
 
-
+    /**
+     * Crea la connessione al database che verrà usata per tutte le altre operazioni.
+     */
     private void inizializzaConnessioneDB() {
         try {
             this.connection = ConnessioneDatabase.getInstance().connection;
@@ -148,8 +153,9 @@ public class Controller {
             System.exit(0);
         }
     }
+
     /**
-     * Crea degli oggetti a solo scopo di test del funzionamento complessivo dell'applicativo.
+     * Riempie gli ArrayList prendendo i dati dal database.
      */
     public void inizializzaListe(){
         try{
@@ -171,6 +177,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Transforma gli ArrayList di ogetti comuni, come String, in ArrayList di oggetti più complessi, come Cliente.
+     */
     public void daArrayListAOggetti(){
         //Cliente
         for(int i=0; i< email.size(); i++){
@@ -441,7 +450,6 @@ public class Controller {
      * @param frameHome  the frame home
      * @return the boolean
      */
-
     public boolean checkClientLogInDetails(String email, String password, Controller controller, JFrame frameHome){
         for (Cliente c : listaClienti){
             if(c.getEmail().equals(email)){
@@ -496,39 +504,74 @@ public class Controller {
      *
      * @param pannelloDati il pannello dati
      */
-    public void popolaElencoFilm(JPanel pannelloDati){
+    public void popolaElencoFilm(JPanel pannelloDati) {
         pannelloDati.removeAll();
         pannelloDati.setLayout(new BoxLayout(pannelloDati, BoxLayout.Y_AXIS));
-        for(Film f : listaFilm){
-            JPanel temp = new JPanel();
-            temp.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 5));
 
-            JLabel labelTitolo = new JLabel("Titolo: ");
+        Font fontLabel = new Font("Segoe UI", Font.BOLD, 12);
+        Font fontValore = new Font("Segoe UI", Font.PLAIN, 12);
+        Font fontRecensione = new Font("Segoe UI", Font.ITALIC, 11);
+
+        for (Film f : listaFilm) {
+            JPanel card = new JPanel();
+            card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+            card.setBackground(Color.WHITE);
+            card.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(220, 220, 220)),
+                    BorderFactory.createEmptyBorder(10, 15, 10, 15)
+            ));
+            card.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            JPanel info = new JPanel(new GridLayout(2, 4, 10, 4));
+            info.setOpaque(false);
+            info.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            info.add(creaLabel("Titolo:", fontLabel));
             JLabel titolo = new JLabel(f.getTitolo());
-            JLabel labelRegista = new JLabel("Regista: ");
-            JLabel regista = new JLabel(f.getRegista());
-            JLabel labelRating = new JLabel("Rating: ");
-            JLabel rating = new JLabel(f.getRating().toString());
-            JLabel labelGenere = new JLabel("Genere: ");
-            JLabel genere = new JLabel(f.getGenere().toString());
+            titolo.setFont(new Font("Segoe UI", Font.BOLD, 13));
+            info.add(titolo);
 
-            titolo.setFont(new Font("Segoe UI", Font.BOLD, 12));
+            info.add(creaLabel("Regista:", fontLabel));
+            info.add(creaLabel(f.getRegista(), fontValore));
 
-            temp.add(labelTitolo);
-            temp.add(titolo);
-            temp.add(labelRegista);
-            temp.add(regista);
-            temp.add(labelRating);
-            temp.add(rating);
-            temp.add(labelGenere);
-            temp.add(genere);
+            info.add(creaLabel("Rating:", fontLabel));
+            info.add(creaLabel(f.getRating().toString(), fontValore));
 
-            temp.setBorder(BorderFactory.createMatteBorder(0, 0, 10, 0, Color.LIGHT_GRAY));
-            temp.setLayout(new GridLayout(4,2));
-            pannelloDati.add(temp);
+            info.add(creaLabel("Genere:", fontLabel));
+            info.add(creaLabel(f.getGenere().toString(), fontValore));
+
+            card.add(info);
+            card.add(Box.createRigidArea(new Dimension(0, 8)));
+
+
+            if (f.getRecensioni() != null && !f.getRecensioni().isEmpty()) {
+                JPanel recensioni = new JPanel();
+                recensioni.setLayout(new BoxLayout(recensioni, BoxLayout.Y_AXIS));
+                recensioni.setOpaque(false);
+                recensioni.setAlignmentX(Component.LEFT_ALIGNMENT);
+                recensioni.setBorder(BorderFactory.createTitledBorder("Recensioni"));
+
+                for (Recensione r : f.getRecensioni()) {
+                    JLabel riga = new JLabel("• " + r.getDescrizione());
+                    riga.setFont(fontRecensione);
+                    riga.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    recensioni.add(riga);
+                }
+                card.add(recensioni);
+            }
+
+            pannelloDati.add(card);
+            pannelloDati.add(Box.createRigidArea(new Dimension(0, 6)));
         }
+
         pannelloDati.revalidate();
         pannelloDati.repaint();
+    }
+
+    private JLabel creaLabel(String testo, Font font) {
+        JLabel l = new JLabel(testo);
+        l.setFont(font);
+        return l;
     }
 
     /**
@@ -542,7 +585,7 @@ public class Controller {
         DefaultTableModel model = new DefaultTableModel(colonne, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Rende la tabella non modificabile con un doppio click
+                return false;
             }
         };
 
@@ -564,7 +607,7 @@ public class Controller {
     }
 
     /**
-     * Riempie la lista dei biglietti acquistati da un certo cliente
+     * Riempie la lista dei biglietti acquistati da un certo cliente.
      *
      * @param listaBigliettiAcquistati la lista biglietti acquistati
      * @param cliente                  il cliente corrispondente
@@ -597,7 +640,6 @@ public class Controller {
      * @param projectionSelector la JComboBox per scegliere la proiezione
      * @param film               il film selezionato
      */
-
     public void creaListaProiezioni(JComboBox<String> projectionSelector, String film){
         DefaultComboBoxModel<String> nuovoModello = new DefaultComboBoxModel<>();
 
@@ -623,6 +665,12 @@ public class Controller {
         projectionSelector.setModel(nuovoModello);
     }
 
+    /**
+     * Controlla la validità del biglietto in base alla data e all'orario.
+     *
+     * @param biglietto il biglietto
+     * @return the boolean
+     */
     public boolean controllaValiditaBiglietto(String biglietto){
         for(Biglietto b : bigliettiVenduti){
             if(biglietto.equals("Codice: "+b.getCodiceBiglietto())){
@@ -633,11 +681,12 @@ public class Controller {
     }
 
     /**
-     * Controlla i dati inseriti e conferma o no l'acquisto dei biglietti.
+     * Controlla i dati inseriti e conferma l'acquisto dei biglietti o l'impossibilità nel farlo.
      *
      * @param film            il film selezioanto
      * @param proiezione      la proiezione scelta
      * @param numeroBiglietti il numero biglietti acquistati
+     * @param cliente         il cliente
      * @return the boolean
      */
     public boolean checkPurchaseDetails(String film, String proiezione, String numeroBiglietti, Cliente cliente) {
@@ -690,6 +739,14 @@ public class Controller {
         }
     }
 
+    /**
+     * Controlla i dati della carta inseriti.
+     *
+     * @param numeroCarta   il numero carta
+     * @param CVVCarta      il cvv carta
+     * @param scadenzaCarta la scadenza carta
+     * @return the boolean
+     */
     public boolean checkCardDetails(String numeroCarta, String CVVCarta, String scadenzaCarta){
         if (numeroCarta == null || CVVCarta == null || scadenzaCarta == null) return false;
         numeroCarta = numeroCarta.replace(" ", "").replace("-", "");
@@ -740,6 +797,16 @@ public class Controller {
         return sommaCifre % 10 == 0;
     }
 
+    /**
+     * Controlla la presenza di posti disponibili per il quantitativo di biglietti richiesto e in caso positivo, procede con la creazione di un nuovo oggetto Pagamento e del suo inserimento nel database.
+     *
+     * @param metodo          il metodo usato per l'acquisto
+     * @param importo         l'importo totale da pagare
+     * @param cliente         il cliente che ha effettuato l'acquisto
+     * @param numeroBiglietti il numero biglietti acquistati
+     * @param datiProiezione  i dati proiezione a cui si riferiscono i biglietti
+     * @return the boolean
+     */
     public boolean salvaDatiPagamento(String metodo, double importo, Cliente cliente, int numeroBiglietti, String datiProiezione){
         try{
             Proiezione proiezioneSelezionata = null;
@@ -801,6 +868,14 @@ public class Controller {
         }
     }
 
+    /**
+     * Crea un nuov oggetto Bilgietto e lo aggiunge nel database.
+     *
+     * @param nuovoPagamento        il riferimento al pagamento
+     * @param proiezioneSelezionata la proiezione selezionata
+     * @param posto                 il posto assegnato
+     * @param importo               l'importo del singolo biglietto
+     */
     public void inserisciNuovoBiglietto(Pagamento nuovoPagamento, Proiezione proiezioneSelezionata, Posto posto, double importo){
         try{
             String codiceBiglietto = "B"+posto.getCodicePosto()+nuovoPagamento.getIdPagamento()+proiezioneSelezionata.getIdProiezione();
@@ -836,6 +911,7 @@ public class Controller {
      * @param valutazione la valutazione scelta
      * @param descrizione la descrizione data
      * @param cliente     il cliente che ha lasciato la recensione
+     * @return the boolean
      */
     public boolean aggiungiRecensione(String film, String valutazione, String descrizione, Cliente cliente) {
         if (film == null || valutazione == null) return false;
@@ -850,8 +926,9 @@ public class Controller {
 
         if (filmTrovato != null) {
             try{
-                Recensione nuovaRecensione = new Recensione(0, Integer.parseInt(valutazione), descrizione, cliente, filmTrovato);
                 recensioneDAO.inserisciRecensione(filmTrovato.getIdFilm(), cliente.getEmail(), descrizione, Integer.parseInt(valutazione));
+                int idNuovaRecensione=recensioneDAO.getNewestId();
+                Recensione nuovaRecensione = new Recensione(idNuovaRecensione, Integer.parseInt(valutazione), descrizione, cliente, filmTrovato);
                 cliente.addRecenzione(nuovaRecensione);
                 filmTrovato.addRecensione(nuovaRecensione);
                 recensioni.add(nuovaRecensione);
@@ -1008,8 +1085,10 @@ public class Controller {
             for(Sala s : listaSale){
                 if(s.getNumeroSala() == Integer.parseInt(sala)){
                     try{
-                        Proiezione nuovaProiezione = new Proiezione(0, LocalDate.parse(giorno, formatter), LocalTime.parse(oraInizio), LocalTime.parse(oraFine), s, film);
+
                         proiezioneDAO.inserisciProiezione(LocalDate.parse(giorno),LocalTime.parse(oraInizio),LocalTime.parse(oraFine), film.getIdFilm(), Integer.parseInt(sala));
+                        int idNUovaProiezione=proiezioneDAO.getNewestId();
+                        Proiezione nuovaProiezione = new Proiezione(idNUovaProiezione, LocalDate.parse(giorno, formatter), LocalTime.parse(oraInizio), LocalTime.parse(oraFine), s, film);
                         film.addProiezione(nuovaProiezione);
                         listaProiezioni.add(nuovaProiezione);
                         return true;
@@ -1023,6 +1102,19 @@ public class Controller {
         return false;
     }
 
+    /**
+     * Se non esiste un film con i dati inseriti, ne crea l'oggetto e lo inserisce sul database. Se il film già è presente sul database o è stato appena aggiunto, chiama la funzione per aggiungere la proiezione.
+     *
+     * @param titolo    il titolo del film
+     * @param regista   il regista
+     * @param genere    il genere
+     * @param rating    il rating
+     * @param giorno    il giorno della proiezione
+     * @param oraInizio l'ora d'inizio della proiezione
+     * @param oraFine   l'ora di fine della proiezione
+     * @param sala      la sala in cui verrà proiettato il film
+     * @return the boolean
+     */
     public boolean aggiungiFilmOProiezione(String titolo, String regista, Genere genere, Rating rating, String giorno, String oraInizio, String oraFine, String sala){
         for(Film f : listaFilm){
             if(f.getTitolo().equals(titolo)){
@@ -1031,8 +1123,9 @@ public class Controller {
         }
 
         try{
-            Film nuovoFilm = new Film(0, titolo, regista, genere, rating);
             filmDAO.inserisciFilm(titolo,regista,rating.toString(),genere.toString());
+            int idNuovoFilm=filmDAO.getNewestId();
+            Film nuovoFilm = new Film(idNuovoFilm, titolo, regista, genere, rating);
             listaFilm.add(nuovoFilm);
             return aggiungiProiezione(nuovoFilm, giorno, oraInizio, oraFine, sala);
         } catch (Exception e) {

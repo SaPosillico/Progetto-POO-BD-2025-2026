@@ -3,9 +3,6 @@ package gui;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
 import controller.*;
 import model.Cliente;
 
@@ -25,9 +22,9 @@ public class AcquistaGUI {
     private JFrame frameAcquista;
 
     /**
-     * Gets frame.
+     * Restituisce il frame.
      *
-     * @return the frame
+     * @return il frame
      */
     public JFrame getFrame() {
         return this.frameAcquista;

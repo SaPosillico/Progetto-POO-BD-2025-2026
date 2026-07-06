@@ -5,8 +5,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-
 import controller.*;
 import model.Cliente;
 
@@ -25,9 +23,9 @@ public class LoggedClientGUI {
     private JFrame frameLoggedClient;
 
     /**
-     * Get frame j frame.
+     * Restituisce il frame.
      *
-     * @return the j frame
+     * @return il frame
      */
     public JFrame getFrame(){
         return this.frameLoggedClient;

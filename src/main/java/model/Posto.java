@@ -15,10 +15,10 @@ public class Posto {
     /**
      * Instantiates a new Posto.
      *
-     * @param codicePosto the codice posto
-     * @param fila        the fila
-     * @param numeroPosto the numero posto
-     * @param numeroSala  the numero sala
+     * @param codicePosto il codice del posto
+     * @param fila        la fila
+     * @param numeroPosto il numero del posto
+     * @param numeroSala  il numero di sala
      */
     public Posto(String codicePosto, char fila, int numeroPosto, Sala numeroSala) {
         this.codicePosto = codicePosto;

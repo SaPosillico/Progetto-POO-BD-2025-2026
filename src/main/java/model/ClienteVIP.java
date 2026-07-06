@@ -9,11 +9,11 @@ public class ClienteVIP extends Cliente{
     /**
      * Instantiates a new Cliente vip.
      *
-     * @param email             the email
-     * @param nome              the nome
-     * @param cognome           the cognome
-     * @param percentualeSconto the percentuale sconto
-     * @param password          the password
+     * @param email             l'email
+     * @param nome              il nome
+     * @param cognome           il cognome
+     * @param percentualeSconto la percentuale sconto
+     * @param password          la password
      */
     public ClienteVIP(String email, String nome, String cognome, double percentualeSconto, String password) {
         super(email, nome, cognome, password);

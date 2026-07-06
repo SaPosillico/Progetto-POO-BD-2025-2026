@@ -2,7 +2,6 @@ package gui;
 
 import controller.*;
 import model.Staff;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,9 +21,9 @@ public class VisualizzaDatiGUI {
     private JFrame frameVisualizzaDati;
 
     /**
-     * Get frame j frame.
+     * Restituisce il frame.
      *
-     * @return the j frame
+     * @return il frame
      */
     public JFrame getFrame(){
         return this.frameVisualizzaDati;

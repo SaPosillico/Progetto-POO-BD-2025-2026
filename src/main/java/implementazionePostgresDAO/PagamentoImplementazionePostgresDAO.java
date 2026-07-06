@@ -6,9 +6,17 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * The type Pagamento implementazione postgres dao.
+ */
 public class PagamentoImplementazionePostgresDAO implements PagamentoDAO {
     private Connection connection;
 
+    /**
+     * Instantiates a new Pagamento implementazione postgres dao.
+     *
+     * @param connection the connection
+     */
     public PagamentoImplementazionePostgresDAO(Connection connection) {
         this.connection = connection;
     }

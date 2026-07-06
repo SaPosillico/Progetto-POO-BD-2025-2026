@@ -17,10 +17,10 @@ public class Staff {
     /**
      * Instantiates a new Staff.
      *
-     * @param matricola the matricola
-     * @param nome      the nome
-     * @param cognome   the cognome
-     * @param stipendio the stipendio
+     * @param matricola la matricola
+     * @param nome      il nome
+     * @param cognome   il cognome
+     * @param stipendio lo stipendio
      */
     public Staff(int matricola, String nome, String cognome, double stipendio) {
         this.matricola = matricola;

@@ -6,9 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * The type Cliente implementazione postgres dao.
+ */
 public class ClienteImplementazionePostgresDAO implements ClienteDAO {
     private Connection connection;
 
+    /**
+     * Instantiates a new Cliente implementazione postgres dao.
+     *
+     * @param connection the connection
+     */
     public ClienteImplementazionePostgresDAO(Connection connection) {
         this.connection = connection;
     }

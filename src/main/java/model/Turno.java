@@ -15,10 +15,11 @@ public class Turno {
     /**
      * Instantiates a new Turno.
      *
-     * @param oraInizioTurno the ora inizio turno
-     * @param oraFineTurno   the ora fine turno
-     * @param membro         the membro
-     * @param mansione       the mansione
+     * @param idTurno        l'id del turno
+     * @param oraInizioTurno l'ora inizio turno
+     * @param oraFineTurno   l'ora fine turno
+     * @param membro         il membro dello staff a cui è assegnato il turno
+     * @param mansione       la mansione
      */
     public Turno(int idTurno, LocalTime oraInizioTurno, LocalTime oraFineTurno, Staff membro, String mansione) {
         this.idTurno = idTurno;
@@ -28,10 +29,20 @@ public class Turno {
         this.mansione = mansione;
     }
 
+    /**
+     * Gets id turno.
+     *
+     * @return the id turno
+     */
     public int getIdTurno() {
         return idTurno;
     }
 
+    /**
+     * Sets id turno.
+     *
+     * @param idTurno the id turno
+     */
     public void setIdTurno(int idTurno) {
         this.idTurno = idTurno;
     }

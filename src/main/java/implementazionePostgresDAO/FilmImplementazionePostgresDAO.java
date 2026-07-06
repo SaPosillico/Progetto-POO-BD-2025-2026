@@ -7,9 +7,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * The type Film implementazione postgres dao.
+ */
 public class FilmImplementazionePostgresDAO implements FilmDAO {
     private Connection connection;
 
+    /**
+     * Instantiates a new Film implementazione postgres dao.
+     *
+     * @param connection the connection
+     */
     public FilmImplementazionePostgresDAO(Connection connection) {
         this.connection = connection;
     }
@@ -45,6 +53,21 @@ public class FilmImplementazionePostgresDAO implements FilmDAO {
             st.close();
             return;
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int getNewestId() {
+        String sql = "SELECT MAX(\"idFilm\") FROM \"Film\";";
+
+        try{
+            ResultSet st = connection.prepareStatement(sql).executeQuery();
+            if(st.next())
+                return  st.getInt("idFilm");
+            return -1;
+        }
+        catch (SQLException e){
             throw new RuntimeException(e);
         }
     }

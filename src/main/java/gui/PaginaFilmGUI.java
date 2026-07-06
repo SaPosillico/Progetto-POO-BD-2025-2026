@@ -2,7 +2,6 @@ package gui;
 
 import javax.swing.*;
 import controller.*;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,9 +20,9 @@ public class PaginaFilmGUI {
     private JFrame frameFilm;
 
     /**
-     * Gets frame.
+     * Restituisce il frame.
      *
-     * @return the frame
+     * @return il frame
      */
     public JFrame getFrame() {
         return this.frameFilm;

@@ -6,9 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * The type Posto implementazione postgres dao.
+ */
 public class PostoImplementazionePostgresDAO implements PostoDAO {
     private Connection connection;
 
+    /**
+     * Instantiates a new Posto implementazione postgres dao.
+     *
+     * @param connection the connection
+     */
     public PostoImplementazionePostgresDAO(Connection connection) {
         this.connection = connection;
     }

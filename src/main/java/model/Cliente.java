@@ -16,10 +16,10 @@ public class Cliente {
     /**
      * Instantiates a new Cliente.
      *
-     * @param email    the email
-     * @param nome     the nome
-     * @param cognome  the cognome
-     * @param password the password
+     * @param email    l'email
+     * @param nome     il nome
+     * @param cognome  il cognome
+     * @param password la password
      */
     public Cliente(String email, String nome, String cognome, String password) {
         this.email = email;
@@ -156,6 +156,11 @@ public class Cliente {
         this.elencoPagamenti.add(p);
     }
 
+    /**
+     * Get tipo string.
+     *
+     * @return the string
+     */
     public String getTipo(){
         return "ordinario";
     }

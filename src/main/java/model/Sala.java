@@ -15,8 +15,8 @@ public class Sala {
     /**
      * Instantiates a new Sala.
      *
-     * @param numeroSala the numero sala
-     * @param capienza   the capienza
+     * @param numeroSala il numero della sala
+     * @param capienza   la capienza
      */
     public Sala(int numeroSala, int capienza) {
         this.numeroSala = numeroSala;

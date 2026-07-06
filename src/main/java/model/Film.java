@@ -17,10 +17,11 @@ public class Film {
     /**
      * Instantiates a new Film.
      *
-     * @param titolo  the titolo
-     * @param regista the regista
-     * @param genere  the genere
-     * @param rating  the rating
+     * @param idFilm  l'id del film
+     * @param titolo  il titolo
+     * @param regista il regista
+     * @param genere  il genere
+     * @param rating  il rating
      */
     public Film(int idFilm,String titolo, String regista, Genere genere, Rating rating) {
         this.idFilm = idFilm;
@@ -32,10 +33,20 @@ public class Film {
         this.proiezioni = new ArrayList<>();
     }
 
+    /**
+     * Gets id film.
+     *
+     * @return the id film
+     */
     public int getIdFilm() {
         return idFilm;
     }
 
+    /**
+     * Sets id film.
+     *
+     * @param idFilm the id film
+     */
     public void setIdFilm(int idFilm) {
         this.idFilm = idFilm;
     }

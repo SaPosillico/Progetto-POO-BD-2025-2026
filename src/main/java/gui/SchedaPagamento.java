@@ -1,15 +1,15 @@
 package gui;
 
 import controller.Controller;
-import dao.BigliettoDAO;
-import implementazionePostgresDAO.BigliettoImplementazionePostgresDAO;
 import model.Cliente;
 import model.ClienteVIP;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The type Scheda pagamento.
+ */
 public class SchedaPagamento {
     private JPanel mainPanel;
     private JRadioButton cashButton;
@@ -20,6 +20,15 @@ public class SchedaPagamento {
     private JButton compraButton;
     private JLabel labelImporto;
 
+    /**
+     * Instantiates a new Scheda pagamento.
+     *
+     * @param frameLocalHome  il frame della local home(LoggedClienteGUI)
+     * @param controller      l'oggetto controller
+     * @param cliente         il cliente
+     * @param numeroBiglietti il numero di biglietti
+     * @param datiProiezione  i dati della proiezione
+     */
     public SchedaPagamento(JFrame frameLocalHome, Controller controller, Cliente cliente, int numeroBiglietti, String datiProiezione) {
         JFrame frame = new JFrame("SchedaPagamento");
         frame.setContentPane(mainPanel);
@@ -51,6 +60,23 @@ public class SchedaPagamento {
                 scadenzaCarta.setEnabled(selezionato);
 
                 if (!selezionato) {
+                    numeroCarta.setText("");
+                    CVVCarta.setText("");
+                    scadenzaCarta.setText("");
+                }
+            }
+        });
+
+        cashButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean selezionato = cashButton.isSelected();
+
+                numeroCarta.setEnabled(!selezionato);
+                CVVCarta.setEnabled(!selezionato);
+                scadenzaCarta.setEnabled(!selezionato);
+
+                if (selezionato) {
                     numeroCarta.setText("");
                     CVVCarta.setText("");
                     scadenzaCarta.setText("");

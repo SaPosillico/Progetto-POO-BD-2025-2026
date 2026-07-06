@@ -18,11 +18,12 @@ public class Proiezione {
     /**
      * Instantiates a new Proiezione.
      *
-     * @param dataProiezione      the data proiezione
-     * @param oraInizioProiezione the ora inizio proiezione
-     * @param oraFineProiezione   the ora fine proiezione
-     * @param salaProiezione      the sala proiezione
-     * @param filmProiettato      the film proiettato
+     * @param idProiezione        l'id della proiezione
+     * @param dataProiezione      la data della proiezione
+     * @param oraInizioProiezione l'ora d'inizio della proiezione
+     * @param oraFineProiezione   l'ora fine della proiezione
+     * @param salaProiezione      la sala della proiezione
+     * @param filmProiettato      il film proiettato
      */
     public Proiezione(int idProiezione, LocalDate dataProiezione, LocalTime oraInizioProiezione, LocalTime oraFineProiezione, Sala salaProiezione, Film filmProiettato) {
         this.idProiezione = idProiezione;
@@ -34,10 +35,20 @@ public class Proiezione {
         this.bigliettiVenduti = new ArrayList<>();
     }
 
+    /**
+     * Gets id proiezione.
+     *
+     * @return the id proiezione
+     */
     public int getIdProiezione() {
         return idProiezione;
     }
 
+    /**
+     * Sets id proiezione.
+     *
+     * @param idProiezione the id proiezione
+     */
     public void setIdProiezione(int idProiezione) {
         this.idProiezione = idProiezione;
     }

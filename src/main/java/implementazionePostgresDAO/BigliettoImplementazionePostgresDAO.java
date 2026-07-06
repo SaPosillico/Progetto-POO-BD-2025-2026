@@ -9,9 +9,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * The type Biglietto implementazione postgres dao.
+ */
 public class BigliettoImplementazionePostgresDAO implements BigliettoDAO {
     private Connection connection;
 
+    /**
+     * Instantiates a new Biglietto implementazione postgres dao.
+     *
+     * @param connection the connection
+     */
     public BigliettoImplementazionePostgresDAO(Connection connection) {
         this.connection = connection;
     }

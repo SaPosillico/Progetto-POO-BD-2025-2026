@@ -18,11 +18,12 @@ public class Pagamento {
     /**
      * Instantiates a new Pagamento.
      *
-     * @param metodoDiPagamento the metodo di pagamento
-     * @param importo           the importo
-     * @param dataPagamento     the data pagamento
-     * @param oraPagamento      the ora pagamento
-     * @param clientePagante    the cliente pagante
+     * @param idPagamento       l'id del pagamento
+     * @param metodoDiPagamento il metodo di pagamento
+     * @param importo           l'importo
+     * @param dataPagamento     la data di pagamento
+     * @param oraPagamento      l'ora di pagamento
+     * @param clientePagante    il cliente pagante
      */
     public Pagamento(int idPagamento, String metodoDiPagamento, double importo, LocalDate dataPagamento, LocalTime oraPagamento, Cliente clientePagante) {
         this.idPagamento = idPagamento;
@@ -35,10 +36,20 @@ public class Pagamento {
     }
 
 
+    /**
+     * Gets id pagamento.
+     *
+     * @return the id pagamento
+     */
     public int getIdPagamento() {
         return idPagamento;
     }
 
+    /**
+     * Sets id pagamento.
+     *
+     * @param idPagamento the id pagamento
+     */
     public void setIdPagamento(int idPagamento) {
         this.idPagamento = idPagamento;
     }

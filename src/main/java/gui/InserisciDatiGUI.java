@@ -4,7 +4,6 @@ import controller.*;
 import model.Genere;
 import model.Rating;
 import model.Staff;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,9 +29,9 @@ public class InserisciDatiGUI {
     private JFrame frameInserisciDati;
 
     /**
-     * Get frame j frame.
+     * Restituisce il frame.
      *
-     * @return the j frame
+     * @return il frame
      */
     public JFrame getFrame(){
         return this.frameInserisciDati;
