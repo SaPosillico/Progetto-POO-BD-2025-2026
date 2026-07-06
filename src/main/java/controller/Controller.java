@@ -150,6 +150,7 @@ public class Controller {
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null,"Impossibile accedere al database.");
+            frameAttuale.dispose();
             System.exit(0);
         }
     }
@@ -173,6 +174,7 @@ public class Controller {
         }
         catch (Exception e){
             JOptionPane.showMessageDialog(null,"Errore nell'accesso ai dati.");
+            frameAttuale.dispose();
             System.exit(0);
         }
     }
@@ -453,8 +455,11 @@ public class Controller {
     public boolean checkClientLogInDetails(String email, String password, Controller controller, JFrame frameHome){
         for (Cliente c : listaClienti){
             if(c.getEmail().equals(email)){
-                changeFrame(new LoggedClientGUI(frameHome,controller,c).getFrame());
-                return true;
+                if(c.getPassword().equals(password)){
+                    changeFrame(new LoggedClientGUI(frameHome,controller,c).getFrame());
+                    return true;
+                }
+                return false;
             }
         }
         return false;
